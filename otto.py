@@ -141,12 +141,10 @@ class Lexer:
             # Numbers
             elif self.current_char in DIGITS:
                 tokens.append(self.tokenize_num())
-                self.advance()
 
             # Identifiers, Keywords, Reserved words
             elif self.current_char in LETTERS:
                 tokens.append(self.tokenize_word())
-                self.advance()
 
             # Strings
             elif self.current_char == '"':
