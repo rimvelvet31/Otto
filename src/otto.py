@@ -1,6 +1,6 @@
-from constants import DIGITS, LETTERS, ALPHANUMERIC, KEYWORDS, RESWORDS, OPERATORS, DELIMITERS
-from position import Position
-from error import IllegalCharError
+from src.constants import DIGITS, LETTERS, ALPHANUMERIC, KEYWORDS, RESWORDS, OPERATORS, DELIMITERS
+from src.position import Position
+from src.error import IllegalCharError
 
 
 class Token:

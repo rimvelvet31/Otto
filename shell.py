@@ -1,6 +1,6 @@
 import os
 import sys
-import otto
+from src import otto
 
 # Enter file path
 FILE_PATH = "test.otto"
