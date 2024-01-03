@@ -2,8 +2,11 @@ import string
 
 # CONSTANTS
 DIGITS = "0123456789"
+
 LETTERS = string.ascii_letters
+
 ALPHANUMERIC = DIGITS + LETTERS
+
 KEYWORDS = [
     'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'collect',
     'continue', 'def', 'del', 'deliver', 'elif', 'else', 'except', 'finally',
@@ -11,12 +14,53 @@ KEYWORDS = [
     'or', 'Ottomate', 'pass', 'pull', 'push', 'raise', 'retrieve', 'return',
     'scrub', 'step', 'try', 'while', 'with', 'yield'
 ]
+
 RESERVED_WORDS = [
     "true", "false", "null"
 ]
 
+OPERATORS = {
+    # Arithmetic
+    "+": "ADDITION",
+    "-": "SUBTRACTION",
+    "*": "MULTIPLICATION",
+    "/": "DIVISION",
+    "%": "MODULO",
+    "**": "EXPONENT",
+    "//": "FLOOR DIVISON",
 
-# FOR ERRORS
+    # Assignment
+    "=": "ASSIGNMENT",
+    "+=": "ADDITION ASSIGNMENT",
+    "-=": "SUBTRACTION ASSIGNMENT",
+    "*=": "MULTIPLICATION ASSIGNMENT",
+    "/=": "DIVISION ASSIGNMENT",
+    "%=": "MODULO ASSIGNMENT",
+    "**=": "EXPONENT ASSIGNMENT",
+    "//=": "FLOOR DIV ASSIGNMENT",
+
+    # Comparison
+    ">": "LESS THAN",
+    "<": "GREATER THAN",
+    ">=": "LESS THAN / EQUALS",
+    "<=": "GREATER THAN / EQUALS",
+    "==": "EQUALS",
+    "!=": "NOT EQUALS",
+}
+
+DELIMITERS = {
+    "(": "LEFT PARENTHESIS",
+    ")": "RIGHT PARENTHESIS",
+    "[": "LEFT BRACKET",
+    "]": "RIGHT BRACKET",
+    "{": "LEFT BRACE",
+    "}": "RIGHT BRACE",
+    ";": "SEMICOLON",
+    ",": "COMMA"
+}
+
+
+# ERROR HANDLING
 class Error:
     def __init__(self, pos_start, pos_end, error_name, details):
         self.pos_start = pos_start
@@ -58,52 +102,7 @@ class Position:
         return Position(self.idx, self.ln, self.col, self.file_name, self.file_text)
 
 
-# TOKENS
-
-# Data types
-TOKEN_INT = "INT"
-TOKEN_FLOAT = "FLOAT"
-TOKEN_STRING = "STRING"
-
-# Identifiers, Keywords, Reswords
-TOKEN_IDENTIFIER = "IDENTIFIER"
-TOKEN_KEYWORD = "KEYWORD"
-TOKEN_RESWORD = "RESERVED WORD"
-
-# Arithmetic
-TOKEN_PLUS = "PLUS"
-TOKEN_MINUS = "MINUS"
-TOKEN_MUL = "MULTIPLY"
-TOKEN_POW = "POWER"
-TOKEN_DIV = "DIVIDE"
-TOKEN_FLRDIV = "FLOOR DIVISION"
-TOKEN_MOD = "MODULO"
-
-# Assignment
-TOKEN_ASSIGN = "ASSIGNMENT"
-
-# Comparison
-TOKEN_EQ = "EQUALS"
-TOKEN_NEQ = "NOT EQUALS"
-TOKEN_LT = "LESS THAN"
-TOKEN_LTE = "LESS THAN / EQUALS"
-TOKEN_GT = "GREATER THAN"
-TOKEN_GTE = "GREATER THAN / EQUALS"
-
-# Delimeters
-TOKEN_LPAREN = "LEFT PARENTHESIS"
-TOKEN_RPAREN = "RIGHT PARENTHESIS"
-TOKEN_LBRACKET = "LEFT BRACKET"
-TOKEN_RBRACKET = "RIGHT BRACKET"
-TOKEN_LBRACE = "LEFT BRACE"
-TOKEN_RBRACE = "RIGHT BRACE"
-TOKEN_SEMI = "SEMICOLON"
-TOKEN_COMMA = "COMMA"
-
-# Unsure
-TOKEN_NEWLINE = "NEWLINE"
-
-
+# TOKEN
 class Token:
     def __init__(self, type_, value=None):
         self.type = type_
@@ -146,78 +145,18 @@ class Lexer:
             elif self.current_char in LETTERS:
                 tokens.append(self.tokenize_word())
 
-            # Strings
+            # Tokenize strings
             elif self.current_char == '"':
                 tokens.append(self.make_string())
 
-            ####################### COMBINE INTO ONE FUNCTION ###########################
-            # Arithmetic
-            elif self.current_char == "+":
-                tokens.append(Token(TOKEN_PLUS))
-                self.advance()
+            # Tokenize operators
+            elif self.current_char in "+-*/%=<>=!":
+                tokens.append(self.make_operator(self.current_char))
 
-            elif self.current_char == "-":
-                tokens.append(Token(TOKEN_MINUS))
-                self.advance()
-
-            elif self.current_char == "*":
-                tokens.append(self.tokenize_mul_or_pow())
-
-            elif self.current_char == "/":
-                tokens.append(self.tokenize_div())
-
-            elif self.current_char == "%":
-                tokens.append(Token(TOKEN_MOD))
-                self.advance()
-
-            # Comparison
-            elif self.current_char == "!":
-                token, error = self.make_not_equals()
-                if error:
-                    return [], error
-                tokens.append(token)
-
-            elif self.current_char == "=":
-                tokens.append(self.make_equals())
-
-            elif self.current_char == "<":
-                tokens.append(self.make_less_than())
-
-            elif self.current_char == ">":
-                tokens.append(self.make_greater_than())
-            ########################### END OF REFACTOR #############################
-
-            # Delimiters
-            elif self.current_char == "(":
-                tokens.append(Token(TOKEN_LPAREN))
-                self.advance()
-
-            elif self.current_char == ")":
-                tokens.append(Token(TOKEN_RPAREN))
-                self.advance()
-
-            elif self.current_char == "[":
-                tokens.append(Token(TOKEN_LBRACKET))
-                self.advance()
-
-            elif self.current_char == "]":
-                tokens.append(Token(TOKEN_RBRACKET))
-                self.advance()
-
-            elif self.current_char == "{":
-                tokens.append(Token(TOKEN_LBRACE))
-                self.advance()
-
-            elif self.current_char == "}":
-                tokens.append(Token(TOKEN_RBRACE))
-                self.advance()
-
-            elif self.current_char == ";":
-                tokens.append(Token(TOKEN_SEMI))
-                self.advance()
-
-            elif self.current_char == ",":
-                tokens.append(Token(TOKEN_COMMA))
+            # Tokenize delimiters
+            elif self.current_char in DELIMITERS:
+                token = DELIMITERS.get(self.current_char)
+                tokens.append(Token(token, self.current_char))
                 self.advance()
 
             # Invalid char
@@ -245,8 +184,8 @@ class Lexer:
             self.advance()
 
         if has_dot:
-            return Token(TOKEN_FLOAT, float(num))
-        return Token(TOKEN_INT, int(num))
+            return Token("FLOAT", num)
+        return Token("INT", num)
 
     def tokenize_word(self):
         word = ""
@@ -256,10 +195,10 @@ class Lexer:
             self.advance()
 
         if word in RESERVED_WORDS:
-            return Token(TOKEN_RESWORD, word)
+            return Token("RESERVED WORD", word)
         if word in KEYWORDS:
-            return Token(TOKEN_KEYWORD, word)
-        return Token(TOKEN_IDENTIFIER, word)
+            return Token("KEYWORD", word)
+        return Token("IDENTIFIER", word)
 
     def make_string(self):
         escape_chars = {
@@ -287,65 +226,31 @@ class Lexer:
             raise Exception("Unterminated String")
 
         self.advance()
-        return Token(TOKEN_STRING, f'"{str}"')
+        return Token("STRING", f'"{str}"')
 
-    # combine into one function
-    def make_not_equals(self):
+    # handle operators
+    def make_operator(self, operator):
+        lexeme = operator
         self.advance()
 
-        if self.current_char == "=":
-            self.advance()
-            return Token(TOKEN_NEQ), None
+        while (self.current_char is not None) and (self.current_char in "+-*/%=<>=!"):
+            if operator == "*" and self.current_char == "*":
+                lexeme += self.current_char
+                self.advance()
 
-    def make_equals(self):
-        self.advance()
+            if operator == "/" and self.current_char == "/":
+                lexeme += self.current_char
+                self.advance()
 
-        if self.current_char == "=":
-            self.advance()
-            return Token(TOKEN_EQ)
+            if self.current_char == "=":
+                lexeme += self.current_char
+                self.advance()
 
-        return Token(TOKEN_ASSIGN)
+        token = OPERATORS.get(lexeme)
+        return Token(token, lexeme)
 
-    def make_less_than(self):
-        self.advance()
-
-        if self.current_char == "=":
-            self.advance()
-            return Token(TOKEN_LTE)
-
-        return Token(TOKEN_LT)
-
-    def make_greater_than(self):
-        self.advance()
-
-        if self.current_char == "=":
-            self.advance()
-            return Token(TOKEN_GTE)
-
-        return Token(TOKEN_GT)
-
-    def tokenize_div(self):
-        self.advance()
-
-        if self.current_char == "/":
-            self.advance()
-            return Token(TOKEN_FLRDIV)
-
-        return Token(TOKEN_DIV)
-
-    def tokenize_mul_or_pow(self):
-        self.advance()
-
-        if self.current_char == "*":
-            self.advance()
-            return Token(TOKEN_POW)
-
-        return Token(TOKEN_MUL)
-    # end of code for combined function
 
 # RUN
-
-
 def run(file, text):
     lexer = Lexer(file, text)
     tokens, error = lexer.tokenize()

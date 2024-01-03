@@ -1,0 +1,15 @@
+LEXEME                                  TOKEN                                   
+if                                      KEYWORD                                 
+(                                       LEFT PARENTHESIS                        
+name                                    IDENTIFIER                              
+==                                      EQUALS                                  
+"Cynthia"                               STRING                                  
+)                                       RIGHT PARENTHESIS                       
+{                                       LEFT BRACE                              
+utter                                   IDENTIFIER                              
+(                                       LEFT PARENTHESIS                        
+"I Love "                               STRING                                  
++                                       ADDITION                                
+name                                    IDENTIFIER                              
+)                                       RIGHT PARENTHESIS                       
+}                                       RIGHT BRACE                             
