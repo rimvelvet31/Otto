@@ -4,15 +4,51 @@ DIGITS = "0123456789"
 
 LETTERS = string.ascii_letters
 
-ALPHANUMERIC = DIGITS + LETTERS
+VALID_IDENTIFIER_CHARS = LETTERS + DIGITS + "_"
+
+VALID_OPERATOR_CHARS = "+-*/%=!<>&|^~"
 
 KEYWORDS = [
-    'and', 'as', 'assert', 'async', 'await', 'break', 'class', 'collect',
-    'continue', 'def', 'del', 'deliver', 'elif', 'else', 'except', 'finally',
-    'for', 'from', 'global', 'if', 'import', 'in', 'lambda', 'nonlocal', 'not',
-    'or', 'Ottomate', 'pass', 'pull', 'push', 'raise', 'retrieve', 'return',
-    'scrub', 'step', 'try', 'while', 'with', 'yield'
+    "and",
+    "as",
+    "assert",
+    "async",
+    "await",
+    "break",
+    "check",
+    "class",
+    "continue",
+    "def",
+    "del",
+    "elif",
+    "else",
+    "exc",
+    "execute",
+    "final",
+    "for",
+    "from",
+    "global",
+    "if",
+    "import",
+    "in",
+    "input"
+    "lambda",
+    "nonlocal",
+    "not",
+    "or",
+    "Ottomate",
+    "pass",
+    "raise",
+    "return",
+    "step",
+    "test",
+    "try",
+    "utter",
+    "while",
+    "with",
+    "yield"
 ]
+
 
 RESWORDS = [
     "true", "false", "null"
@@ -45,6 +81,14 @@ OPERATORS = {
     "<=": "GREATER THAN / EQUALS",
     "==": "EQUALS",
     "!=": "NOT EQUALS",
+
+    # Bitwise
+    "&": "BITWISE AND",
+    "|": "BITWISE OR",
+    "^": "BITWISE XOR",
+    "~": "BITWISE NOT",
+    "<<": "BITWISE LEFT SHIFT",
+    ">>": "BITWISE RIGHT SHIFT",
 }
 
 DELIMITERS = {

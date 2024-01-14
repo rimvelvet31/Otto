@@ -1,15 +1,6 @@
 LEXEME                                  TOKEN                                   
-if                                      KEYWORD                                 
+utter                                   KEYWORD                                 
 (                                       LEFT PARENTHESIS                        
-name                                    IDENTIFIER                              
-==                                      EQUALS                                  
-"Cynthia"                               STRING                                  
+"Hello world!"                          STRING                                  
 )                                       RIGHT PARENTHESIS                       
-{                                       LEFT BRACE                              
-utter                                   IDENTIFIER                              
-(                                       LEFT PARENTHESIS                        
-"I Love "                               STRING                                  
-+                                       ADDITION                                
-name                                    IDENTIFIER                              
-)                                       RIGHT PARENTHESIS                       
-}                                       RIGHT BRACE                             
+;                                       SEMICOLON                               

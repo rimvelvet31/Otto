@@ -1,3 +1,1 @@
-if (name == "Cynthia") {
-    utter("I Love " + name)
-}
+utter("Hello world!");

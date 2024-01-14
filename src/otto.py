@@ -1,6 +1,5 @@
-from src.constants import DIGITS, LETTERS, ALPHANUMERIC, KEYWORDS, RESWORDS, OPERATORS, DELIMITERS
+from src.constants import *
 from src.position import Position
-from src.error import IllegalCharError
 
 
 class Token:
@@ -8,10 +7,10 @@ class Token:
         self.type = type_
         self.value = value
 
-    def __repr__(self):
-        if self.value:
-            return f"{self.type}:{self.value}"
-        return f"{self.type}"
+    # def __repr__(self):
+    #     if self.value:
+    #         return f"{self.type}:{self.value}"
+    #     return f"{self.type}"
 
 
 class Lexer:
@@ -41,16 +40,19 @@ class Lexer:
                 tokens.append(self.make_num())
 
             # Identifiers, Keywords, Reserved words
-            elif self.current_char in LETTERS:
+            elif self.current_char in LETTERS + "_":
                 tokens.append(self.make_word())
 
             # Tokenize strings
-            elif self.current_char == '"':
-                tokens.append(self.make_string())
+            elif self.current_char in ("'", '"'):
+                tokens.append(self.make_string(self.current_char))
 
             # Tokenize operators
-            elif self.current_char in "+-*/%=<>=!":
+            elif self.current_char in VALID_OPERATOR_CHARS:
                 tokens.append(self.make_operator(self.current_char))
+
+            elif self.current_char == "#":
+                tokens.append(self.make_comment())
 
             # Tokenize delimiters
             elif self.current_char in DELIMITERS:
@@ -60,12 +62,16 @@ class Lexer:
 
             # Invalid char
             else:
-                err_start = self.pos.copy()
-                char = self.current_char
-                self.advance()
-                return [], IllegalCharError(err_start, self.pos, f"'{char}'")
+                # err_start = self.pos.copy()
+                # char = self.current_char
+                # self.advance()
+                # return [], IllegalCharError(err_start, self.pos, f"'{char}'")
 
-        return tokens, None
+                error_token = Token("INVALID CHARACTER", self.current_char)
+                tokens.append(error_token)
+                self.advance()
+
+        return tokens
 
     # Helper methods
     def make_num(self):
@@ -90,54 +96,74 @@ class Lexer:
     def make_word(self):
         word = ""
 
-        while (self.current_char is not None) and (self.current_char in ALPHANUMERIC + "_"):
+        while (self.current_char is not None) and (self.current_char in VALID_IDENTIFIER_CHARS):
             word += self.current_char
             self.advance()
 
         if word in RESWORDS:
             return Token("RESERVED WORD", word)
+
         if word in KEYWORDS:
             return Token("KEYWORD", word)
+
         return Token("IDENTIFIER", word)
 
-    def make_string(self):
+    def make_string(self, quote):
         escape_chars = {
             "n": "\n",
             "t": "\t"
         }
 
-        str = ""
+        strng = ""
         escape_char = False
         self.advance()
 
-        while (self.current_char is not None) and (self.current_char != '"' or escape_char):
+        while (self.current_char is not None) and (self.current_char != quote or escape_char):
             if escape_char:
-                str += escape_chars.get(self.current_char, self.current_char)
+                strng += escape_chars.get(self.current_char,
+                                          self.current_char)
                 escape_char = False
             else:
                 if self.current_char == "\\":
                     escape_char = True
                 else:
-                    str += self.current_char
+                    strng += self.current_char
             self.advance()
 
-        # Check if string is properly terminated
-        if self.current_char != '"':
-            raise Exception("Unterminated String")
+        # Raise error if string is not properly terminated
+        if self.current_char != quote:
+            return Token("UNTERMINATED STRING", f'"{strng}')
 
         self.advance()
-        return Token("STRING", f'"{str}"')
+        str_with_quotes = f'"{strng}"' if quote == '"' else f"'{strng}'"
+        return Token("STRING", str_with_quotes)
 
     def make_operator(self, operator):
         lexeme = operator
         self.advance()
 
-        while (self.current_char is not None) and (self.current_char in "+-*/%=<>=!"):
+        # If current char is just "!", it should return an invalid token
+        if operator == "!" and self.current_char != "=":
+            return Token("INVALID CHARACTER", "!")
+
+        while (self.current_char is not None) and (self.current_char in "+-*/%=<>&|^~"):
+            # Exponent
             if operator == "*" and self.current_char == "*":
                 lexeme += self.current_char
                 self.advance()
 
+            # Floor division
             if operator == "/" and self.current_char == "/":
+                lexeme += self.current_char
+                self.advance()
+
+            # Bitwise left shift
+            if operator == "<" and self.current_char == "<":
+                lexeme += self.current_char
+                self.advance()
+
+            # Bitwise right shift
+            if operator == ">" and self.current_char == ">":
                 lexeme += self.current_char
                 self.advance()
 
@@ -148,10 +174,27 @@ class Lexer:
         token = OPERATORS.get(lexeme)
         return Token(token, lexeme)
 
+    def make_comment(self):
+        comment_text = self.current_char
+        self.advance()  # Consume the "#"
+
+        # TODO Add multi-line comment
+
+        # Single-line comment
+        while (self.current_char is not None) and (self.current_char != "\n"):
+            comment_text += self.current_char
+            self.advance()
+        return Token("SINGLE-LINE COMMENT", comment_text)
+
+    def peek(self):
+        if self.pos.idx + 1 < len(self.text):
+            return self.text[self.pos.idx + 1]
+        return None
+
 
 # RUN
 def run(file, text):
     lexer = Lexer(file, text)
-    tokens, error = lexer.tokenize()
+    tokens = lexer.tokenize()
 
-    return tokens, error
+    return tokens
