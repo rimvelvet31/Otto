@@ -13,4 +13,4 @@ Enter Otto, a high-level and dynamic programming language geared towards **autom
   - open your terminal and run the command `python shell.py` (make sure you're in the root directory!)
   - use the built-in ▶️ Run button/feature on your IDE
 - To write your own otto code to be scanned by the lexer, go to `test.otto`
-- To see the output, go to `symbol_table.py`, which contains the table of lexemes and tokens
+- To see the output, go to `symbol_table.txt`, which contains the table of lexemes and tokens
