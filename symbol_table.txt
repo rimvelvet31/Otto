@@ -1,6 +1,2 @@
 LEXEME                                  TOKEN                                   
-utter                                   KEYWORD                                 
-(                                       LEFT PARENTHESIS                        
-"Hello world!"                          STRING                                  
-)                                       RIGHT PARENTHESIS                       
-;                                       SEMICOLON                               
+ab%dd                                   INVALID                                 

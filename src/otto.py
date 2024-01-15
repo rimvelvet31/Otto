@@ -1,3 +1,5 @@
+import re
+
 from src.constants import *
 from src.position import Position
 
@@ -6,11 +8,6 @@ class Token:
     def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
-
-    # def __repr__(self):
-    #     if self.value:
-    #         return f"{self.type}:{self.value}"
-    #     return f"{self.type}"
 
 
 class Lexer:
@@ -67,7 +64,7 @@ class Lexer:
                 # self.advance()
                 # return [], IllegalCharError(err_start, self.pos, f"'{char}'")
 
-                error_token = Token("INVALID CHARACTER", self.current_char)
+                error_token = Token("INVALID", self.current_char)
                 tokens.append(error_token)
                 self.advance()
 
@@ -91,12 +88,16 @@ class Lexer:
 
         if has_dot:
             return Token("FLOAT", num)
+
         return Token("INT", num)
 
     def make_word(self):
         word = ""
 
-        while (self.current_char is not None) and (self.current_char in VALID_IDENTIFIER_CHARS):
+        # Identifier rules
+        identifier_regex = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
+
+        while self.current_char is not None:
             word += self.current_char
             self.advance()
 
@@ -105,6 +106,9 @@ class Lexer:
 
         if word in KEYWORDS:
             return Token("KEYWORD", word)
+
+        if not identifier_regex.match(word):
+            return Token("INVALID", word)
 
         return Token("IDENTIFIER", word)
 
@@ -144,7 +148,7 @@ class Lexer:
 
         # If current char is just "!", it should return an invalid token
         if operator == "!" and self.current_char != "=":
-            return Token("INVALID CHARACTER", "!")
+            return Token("INVALID", "!")
 
         while (self.current_char is not None) and (self.current_char in "+-*/%=<>&|^~"):
             # Exponent
@@ -176,9 +180,9 @@ class Lexer:
 
     def make_comment(self):
         comment_text = self.current_char
-        self.advance()  # Consume the "#"
+        self.advance()  # Consume opening "#"
 
-        # TODO Add multi-line comment
+        # TODO Multi-line comment
 
         # Single-line comment
         while (self.current_char is not None) and (self.current_char != "\n"):
