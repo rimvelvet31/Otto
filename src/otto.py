@@ -112,10 +112,10 @@ class Lexer:
         if word in KEYWORDS:
             return Token("KEYWORD", word)
 
-        if not identifier_regex.match(word):
-            return Token("INVALID", word)
+        if identifier_regex.match(word):
+            return Token("IDENTIFIER", word)
 
-        return Token("IDENTIFIER", word)
+        return Token("INVALID", word)
 
     def make_string(self, quote):
         escape_chars = {
