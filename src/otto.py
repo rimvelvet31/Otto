@@ -1,11 +1,9 @@
-import re
-
 from src.constants import *
 from src.position import Position
 
 
 class Token:
-    def __init__(self, type_, value=None):
+    def __init__(self, type_, value):
         self.type = type_
         self.value = value
 
@@ -24,6 +22,7 @@ class Lexer:
             self.text) else None
 
     def tokenize(self):
+        # List of Token objects with attributes: type, value)
         tokens = []
 
         while self.current_char is not None:
@@ -94,15 +93,7 @@ class Lexer:
     def make_word(self):
         word = ""
 
-        # IDENTIFIER RULES
-        # - Identifiers are case sensitive
-        # - They cannot contain whitespace
-        # - They cannot contain special chars, expect underscore (_)
-        # - They can contain numbers, but are not allowed to start with one
-        # - They must start with an uppercase or lowercase letter, or with underscore
-        identifier_regex = re.compile(r'^[a-zA-Z_][a-zA-Z0-9_]*$')
-
-        while self.current_char is not None:
+        while self.current_char is not None and self.current_char in LETTERS + "_":
             word += self.current_char
             self.advance()
 
@@ -185,23 +176,16 @@ class Lexer:
 
     def make_comment(self):
         comment_text = self.current_char
-        self.advance()  # Consume opening "#"
+        self.advance()  # Consume the "#"
 
-        # TODO Multi-line comment
-
-        # Single-line comment
+        # Treat everything after the "#" but before a newline as a comment
         while (self.current_char is not None) and (self.current_char != "\n"):
             comment_text += self.current_char
             self.advance()
-        return Token("SINGLE-LINE COMMENT", comment_text)
-
-    def peek(self):
-        if self.pos.idx + 1 < len(self.text):
-            return self.text[self.pos.idx + 1]
-        return None
+        return Token("COMMENT", comment_text)
 
 
-# RUN
+# TODO Move scanning logic from tokenize to here and put this on the diff file
 def run(file, text):
     lexer = Lexer(file, text)
     tokens = lexer.tokenize()

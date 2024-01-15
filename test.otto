@@ -1,1 +1,6 @@
-ab%dd
+
+
+
+def greet() {
+  utter("Hello " + name);
+}

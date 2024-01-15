@@ -1,2 +1,14 @@
 LEXEME                                  TOKEN                                   
-ab%dd                                   INVALID                                 
+def                                     KEYWORD                                 
+greet                                   IDENTIFIER                              
+(                                       LEFT PARENTHESIS                        
+)                                       RIGHT PARENTHESIS                       
+{                                       LEFT BRACE                              
+utter                                   KEYWORD                                 
+(                                       LEFT PARENTHESIS                        
+"Hello "                                STRING                                  
++                                       ADDITION                                
+name                                    IDENTIFIER                              
+)                                       RIGHT PARENTHESIS                       
+;                                       SEMICOLON                               
+}                                       RIGHT BRACE                             
