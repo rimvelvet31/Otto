@@ -18,7 +18,7 @@ IDENTIFIER_REGEX = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$")
 VALID_OPERATOR_CHARS = "+-*/%=!<>&|^~"
 
 KEYWORDS = [
-    "and",
+    # "and",
     "as",
     "assert",
     "async",
@@ -39,12 +39,12 @@ KEYWORDS = [
     "global",
     "if",
     "import",
-    "in",
+    # "in",
     "input"
     "lambda",
     "nonlocal",
-    "not",
-    "or",
+    # "not",
+    # "or",
     "Ottomate",
     "pass",
     "raise",
@@ -62,7 +62,7 @@ NOISE_WORDS = ["delete", "except", "finally"]
 
 RESWORDS = ["true", "false", "null"]
 
-OPERATORS = {
+SYMBOL_OPERATORS = {
     # Arithmetic
     "+": "ADDITION",
     "-": "SUBTRACTION",
@@ -97,6 +97,19 @@ OPERATORS = {
     "~": "BITWISE NOT",
     "<<": "BITWISE LEFT SHIFT",
     ">>": "BITWISE RIGHT SHIFT",
+}
+
+WORD_OPERATORS = {
+    # Logical
+    "and": "LOGICAL AND",
+    "or": "LOGICAL OR",
+    "not": "LOGICAL NOT",
+
+    # Identity
+    "is": "IDENTITY",
+
+    # Membership
+    "in": "MEMBERSHIP",
 }
 
 DELIMITERS = {

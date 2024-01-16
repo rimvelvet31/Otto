@@ -106,6 +106,9 @@ class Lexer:
             word += self.current_char
             self.advance()
 
+        if word in WORD_OPERATORS:
+            return Token(WORD_OPERATORS[word], word)
+
         if word in RESWORDS:
             return Token("RESERVED WORD", word)
 
@@ -188,11 +191,12 @@ class Lexer:
                 lexeme += self.current_char
                 self.advance()
 
+            # Equality / Compound assignment
             if self.current_char == "=":
                 lexeme += self.current_char
                 self.advance()
 
-        token = OPERATORS.get(lexeme)
+        token = SYMBOL_OPERATORS.get(lexeme)
         return Token(token, lexeme)
 
     def make_comment(self):
