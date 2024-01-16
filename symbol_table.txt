@@ -1,9 +1,2 @@
 LEXEME                                  TOKEN                                   
-and                                     LOGICAL AND                             
-or                                      LOGICAL OR                              
-not                                     LOGICAL NOT                             
-is                                      IDENTITY                                
-in                                      MEMBERSHIP                              
-!=                                      NOT EQUALS                              
-==                                      EQUALS                                  
-<=                                      GREATER THAN / EQUALS                   
+"110145154154157"                       STRING                                  

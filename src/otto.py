@@ -134,8 +134,9 @@ class Lexer:
 
     def make_string(self, quote):
         escape_chars = {
-            "n": "\n",
-            "t": "\t"
+            "n": "\n",  # newline
+            "t": "\t",  # tab
+            "r": "\r",  # carriage return
         }
 
         strng = ""
@@ -144,8 +145,7 @@ class Lexer:
 
         while (self.current_char is not None) and (self.current_char != quote or escape_char):
             if escape_char:
-                strng += escape_chars.get(self.current_char,
-                                          self.current_char)
+                strng += escape_chars.get(self.current_char, self.current_char)
                 escape_char = False
             else:
                 if self.current_char == "\\":
