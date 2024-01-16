@@ -1,14 +1,13 @@
+# Invalid
 +first_name
-
 last-name
-
 123age
-
 number@1
-
 $address
-
 age?
-
 no!
+
+# Valid
+pl_name = "Otto"
+age = 0
 
