@@ -1,14 +1,9 @@
 LEXEME                                  TOKEN                                   
-del                                     KEYWORD                                 
-del                                     KEYWORD                                 
-ete                                     NOISE WORD                              
-final                                   KEYWORD                                 
-finally1                                IDENTIFIER                              
-exc                                     KEYWORD                                 
-ept                                     NOISE WORD                              
-exc                                     KEYWORD                                 
-exceptand                               IDENTIFIER                              
-and                                     KEYWORD                                 
-# Issue:                                COMMENT                                 
-?                                       INVALID                                 
-invalid                                 IDENTIFIER                              
+and                                     LOGICAL AND                             
+or                                      LOGICAL OR                              
+not                                     LOGICAL NOT                             
+is                                      IDENTITY                                
+in                                      MEMBERSHIP                              
+!=                                      NOT EQUALS                              
+==                                      EQUALS                                  
+<=                                      GREATER THAN / EQUALS                   

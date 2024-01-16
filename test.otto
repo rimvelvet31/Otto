@@ -1,15 +1,9 @@
-del
-delete
-
-final
-finally1
-
-except
-exc
-exceptand
-
 and
+or
+not
+is
+in
 
-
-# Issue:
-?invalid
+!=
+==
+<=
