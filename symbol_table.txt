@@ -1,14 +1,14 @@
 LEXEME                                  TOKEN                                   
-def                                     KEYWORD                                 
-greet                                   IDENTIFIER                              
-(                                       LEFT PARENTHESIS                        
-)                                       RIGHT PARENTHESIS                       
-{                                       LEFT BRACE                              
-utter                                   KEYWORD                                 
-(                                       LEFT PARENTHESIS                        
-"Hello "                                STRING                                  
-+                                       ADDITION                                
-name                                    IDENTIFIER                              
-)                                       RIGHT PARENTHESIS                       
-;                                       SEMICOLON                               
-}                                       RIGHT BRACE                             
+del                                     KEYWORD                                 
+del                                     KEYWORD                                 
+ete                                     NOISE WORD                              
+final                                   KEYWORD                                 
+finally1                                IDENTIFIER                              
+exc                                     KEYWORD                                 
+ept                                     NOISE WORD                              
+exc                                     KEYWORD                                 
+exceptand                               IDENTIFIER                              
+and                                     KEYWORD                                 
+# Issue:                                COMMENT                                 
+?                                       INVALID                                 
+invalid                                 IDENTIFIER                              

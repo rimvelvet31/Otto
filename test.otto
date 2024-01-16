@@ -1,6 +1,15 @@
+del
+delete
+
+final
+finally1
+
+except
+exc
+exceptand
+
+and
 
 
-
-def greet() {
-  utter("Hello " + name);
-}
+# Issue:
+?invalid
