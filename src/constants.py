@@ -1,19 +1,10 @@
-import re
 import string
 
 DIGITS = "0123456789"
 
-LETTERS = string.ascii_letters
+LETTERS = string.ascii_letters + "_"
 
-VALID_IDENTIFIER_CHARS = LETTERS + DIGITS + "_"
-
-# IDENTIFIER RULES
-# - Identifiers are case sensitive
-# - They cannot contain whitespace
-# - They cannot contain special chars, expect underscore (_)
-# - They can contain numbers, but are not allowed to start with one
-# - They must start with an uppercase or lowercase letter, or with underscore
-IDENTIFIER_REGEX = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$")
+VALID_IDENTIFIER_CHARS = LETTERS + DIGITS
 
 VALID_OPERATOR_CHARS = "+-*/%=!<>&|^~"
 

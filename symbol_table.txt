@@ -1,17 +1,16 @@
 LEXEME                                  TOKEN                                   
-+                                       ADDITION                                
-first_name                              IDENTIFIER                              
-last                                    IDENTIFIER                              
--                                       SUBTRACTION                             
-name                                    IDENTIFIER                              
-123                                     INT                                     
+# Invalid                               COMMENT                                 
++first_name                             INVALID                                 
+last-name                               INVALID                                 
+123age                                  INVALID                                 
+number@1                                INVALID                                 
+$address                                INVALID                                 
+age?                                    INVALID                                 
+no!                                     INVALID                                 
+# Valid                                 COMMENT                                 
+pl_name                                 IDENTIFIER                              
+=                                       ASSIGNMENT                              
+"Otto"                                  STRING                                  
 age                                     IDENTIFIER                              
-number                                  IDENTIFIER                              
-@                                       INVALID                                 
-1                                       INT                                     
-$                                       INVALID                                 
-address                                 IDENTIFIER                              
-age                                     IDENTIFIER                              
-?                                       INVALID                                 
-no                                      IDENTIFIER                              
-!                                       INVALID                                 
+=                                       ASSIGNMENT                              
+0                                       INT                                     

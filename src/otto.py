@@ -1,4 +1,5 @@
 from src.constants import *
+from src.regex import *
 from src.position import Position
 
 
@@ -35,8 +36,12 @@ class Lexer:
             elif self.current_char in DIGITS:
                 tokens.append(self.make_num())
 
+            # Tokenize operators
+            elif self.current_char in VALID_OPERATOR_CHARS:
+                tokens.append(self.make_operator(self.current_char))
+
             # Identifiers, Keywords, Reserved words, Noise words
-            elif self.current_char in LETTERS + "_":
+            elif self.current_char in LETTERS:
                 word_token = self.make_word()
 
                 # To handle noise words
@@ -55,10 +60,6 @@ class Lexer:
             elif self.current_char in ("'", '"'):
                 tokens.append(self.make_string(self.current_char))
 
-            # Tokenize operators
-            elif self.current_char in VALID_OPERATOR_CHARS:
-                tokens.append(self.make_operator(self.current_char))
-
             # Tokenize comments
             elif self.current_char == "#":
                 tokens.append(self.make_comment())
@@ -71,9 +72,7 @@ class Lexer:
 
             # Invalid char
             else:
-                error_token = Token("INVALID", self.current_char)
-                tokens.append(error_token)
-                self.advance()
+                tokens.append(self.make_invalid())
 
         return tokens
 
@@ -81,28 +80,27 @@ class Lexer:
 
     def make_num(self):
         num = ""
-        has_dot = False
 
         while (self.current_char is not None) and (self.current_char in DIGITS + "."):
-            if self.current_char == ".":
-                # if num already has decimal point
-                if has_dot:
-                    break
-                has_dot = True
-                num += "."
-            else:
-                num += self.current_char
+            num += self.current_char
             self.advance()
 
-        if has_dot:
+        # Checks if the next char is a letter (identifiers cannot start with numbers)
+        if self.current_char is not None and self.current_char in LETTERS:
+            return self.make_invalid(num)
+
+        if match_float(num):
             return Token("FLOAT", num)
 
-        return Token("INT", num)
+        if match_int(num):
+            return Token("INT", num)
+
+        return self.make_invalid(num)
 
     def make_word(self):
         word = ""
 
-        while self.current_char is not None and self.current_char in VALID_IDENTIFIER_CHARS:
+        while (self.current_char is not None) and (self.current_char != " "):
             word += self.current_char
             self.advance()
 
@@ -130,7 +128,7 @@ class Lexer:
         if IDENTIFIER_REGEX.match(word):
             return Token("IDENTIFIER", word)
 
-        return Token("INVALID", word)
+        return self.make_invalid(word)
 
     def make_string(self, quote):
         escape_chars = {
@@ -158,46 +156,57 @@ class Lexer:
         if self.current_char != quote:
             return Token("UNTERMINATED STRING", f'"{strng}')
 
-        self.advance()
+        self.advance()  # Consume closing quote
+
         str_with_quotes = f'"{strng}"' if quote == '"' else f"'{strng}'"
+
+        # Checks if the next char is a letter (identifiers cannot start with strings)
+        if self.current_char is not None and self.current_char in LETTERS:
+            return self.make_invalid(str_with_quotes)
+
         return Token("STRING", str_with_quotes)
 
     def make_operator(self, operator):
-        lexeme = operator
+        operator_type = operator
         self.advance()
 
         # If current char is just "!", it should return an invalid token
         if operator == "!" and self.current_char != "=":
-            return Token("INVALID", "!")
+            return self.make_invalid()
 
         while (self.current_char is not None) and (self.current_char in "+-*/%=<>&|^~"):
             # Exponent
             if operator == "*" and self.current_char == "*":
-                lexeme += self.current_char
+                operator_type += self.current_char
                 self.advance()
 
             # Floor division
             if operator == "/" and self.current_char == "/":
-                lexeme += self.current_char
+                operator_type += self.current_char
                 self.advance()
 
             # Bitwise left shift
             if operator == "<" and self.current_char == "<":
-                lexeme += self.current_char
+                operator_type += self.current_char
                 self.advance()
 
             # Bitwise right shift
             if operator == ">" and self.current_char == ">":
-                lexeme += self.current_char
+                operator_type += self.current_char
                 self.advance()
 
             # Equality / Compound assignment
             if self.current_char == "=":
-                lexeme += self.current_char
+                operator_type += self.current_char
                 self.advance()
 
-        token = SYMBOL_OPERATORS.get(lexeme)
-        return Token(token, lexeme)
+        token = SYMBOL_OPERATORS.get(operator_type)
+
+        # Checks if the next char is a letter (identifiers cannot start with special chars)
+        if self.current_char is not None and self.current_char in LETTERS:
+            return self.make_invalid(operator_type)
+
+        return Token(token, operator_type)
 
     def make_comment(self):
         comment_text = self.current_char
@@ -209,8 +218,15 @@ class Lexer:
             self.advance()
         return Token("COMMENT", comment_text)
 
+    def make_invalid(self, text=""):
+        while (self.current_char is not None) and (self.current_char != " "):
+            text += self.current_char
+            self.advance()
 
-# TODO Move scanning logic from tokenize to here and put this on the diff file
+        return Token("INVALID", text)
+
+
+# RUN
 def run(file, text):
     lexer = Lexer(file, text)
     tokens = lexer.tokenize()
