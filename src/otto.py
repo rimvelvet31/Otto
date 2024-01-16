@@ -35,9 +35,21 @@ class Lexer:
             elif self.current_char in DIGITS:
                 tokens.append(self.make_num())
 
-            # Identifiers, Keywords, Reserved words
+            # Identifiers, Keywords, Reserved words, Noise words
             elif self.current_char in LETTERS + "_":
-                tokens.append(self.make_word())
+                word_token = self.make_word()
+
+                # To handle noise words
+                if isinstance(word_token, list):
+                    keyword_token = word_token[0]
+                    noise_word_token = word_token[1]
+
+                    tokens.append(keyword_token)
+                    tokens.append(noise_word_token)
+
+                # For indentifiers, keywords, reswords
+                else:
+                    tokens.append(word_token)
 
             # Tokenize strings
             elif self.current_char in ("'", '"'):
@@ -47,6 +59,7 @@ class Lexer:
             elif self.current_char in VALID_OPERATOR_CHARS:
                 tokens.append(self.make_operator(self.current_char))
 
+            # Tokenize comments
             elif self.current_char == "#":
                 tokens.append(self.make_comment())
 
@@ -58,11 +71,6 @@ class Lexer:
 
             # Invalid char
             else:
-                # err_start = self.pos.copy()
-                # char = self.current_char
-                # self.advance()
-                # return [], IllegalCharError(err_start, self.pos, f"'{char}'")
-
                 error_token = Token("INVALID", self.current_char)
                 tokens.append(error_token)
                 self.advance()
@@ -70,6 +78,7 @@ class Lexer:
         return tokens
 
     # Helper methods
+
     def make_num(self):
         num = ""
         has_dot = False
@@ -93,7 +102,7 @@ class Lexer:
     def make_word(self):
         word = ""
 
-        while self.current_char is not None and self.current_char in LETTERS + "_":
+        while self.current_char is not None and self.current_char in VALID_IDENTIFIER_CHARS:
             word += self.current_char
             self.advance()
 
@@ -103,7 +112,19 @@ class Lexer:
         if word in KEYWORDS:
             return Token("KEYWORD", word)
 
-        if identifier_regex.match(word):
+        if word in NOISE_WORDS:
+            word_table = {
+                "delete": ["del", "ete"],
+                "except": ["exc", "ept"],
+                "finally": ["final", "ly"],
+            }
+
+            keyword = word_table[word][0]
+            noise_word = word_table[word][1]
+
+            return [Token("KEYWORD", keyword), Token("NOISE WORD", noise_word)]
+
+        if IDENTIFIER_REGEX.match(word):
             return Token("IDENTIFIER", word)
 
         return Token("INVALID", word)
