@@ -1,8 +1,5 @@
 LEXEME                                  TOKEN                                   
-if                                      KEYWORD                                 
-(                                       LPAREN_DELIM                            
-true                                    RESWORD                                 
-)                                       RPAREN_DELIM                            
-{                                       LBRACE_DELIM                            
-"Hello"                                 STRING                                  
-}                                       RBRACE_DELIM                            
+123                                     INT                                     
+23.342                                  FLOAT                                   
+22int
+                                  INVALID_TOKEN                           
