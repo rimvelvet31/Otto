@@ -1,3 +1,3 @@
-123
-23.342
-22int
+def greet () {
+  "Hello"
+}

@@ -1,5 +1,8 @@
 LEXEME                                  TOKEN                                   
-123                                     INT                                     
-23.342                                  FLOAT                                   
-22int
-                                  INVALID_TOKEN                           
+def                                     KEYWORD                                 
+greet                                   IDENTIFIER                              
+(                                       LPAREN_DELIM                            
+)                                       RPAREN_DELIM                            
+{                                       LBRACE_DELIM                            
+"Hello"                                 STRING                                  
+}                                       RBRACE_DELIM                            

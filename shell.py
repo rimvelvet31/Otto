@@ -24,7 +24,7 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
     tokens = otto.run(f"<{FILE_PATH}>", code)
 
     for token in tokens:
-        lexeme = token.value
+        lexeme = token.value.strip()
         token_type = token.type
 
         symbol_table.append([lexeme, token_type])
