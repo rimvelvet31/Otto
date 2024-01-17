@@ -9,7 +9,6 @@ VALID_IDENTIFIER_CHARS = LETTERS + DIGITS
 VALID_OPERATOR_CHARS = "+-*/%=!<>&|^~"
 
 KEYWORDS = [
-    # "and",
     "as",
     "assert",
     "async",
@@ -30,12 +29,9 @@ KEYWORDS = [
     "global",
     "if",
     "import",
-    # "in",
     "input"
     "lambda",
     "nonlocal",
-    # "not",
-    # "or",
     "Ottomate",
     "pass",
     "raise",
@@ -55,61 +51,61 @@ RESWORDS = ["true", "false", "null"]
 
 SYMBOL_OPERATORS = {
     # Arithmetic
-    "+": "ADDITION",
-    "-": "SUBTRACTION",
-    "*": "MULTIPLICATION",
-    "/": "DIVISION",
-    "%": "MODULO",
-    "**": "EXPONENT",
-    "//": "FLOOR DIVISON",
+    "+": "ADD_OP",
+    "-": "SUB_OP",
+    "*": "MUL_OP",
+    "/": "DIV_OP",
+    "%": "MOD_OP",
+    "**": "POW_OP",
+    "//": "FDIV_OP",
 
     # Assignment
-    "=": "ASSIGNMENT",
-    "+=": "ADDITION ASSIGNMENT",
-    "-=": "SUBTRACTION ASSIGNMENT",
-    "*=": "MULTIPLICATION ASSIGNMENT",
-    "/=": "DIVISION ASSIGNMENT",
-    "%=": "MODULO ASSIGNMENT",
-    "**=": "EXPONENT ASSIGNMENT",
-    "//=": "FLOOR DIV ASSIGNMENT",
+    "=": "ASSIGN_OP",
+    "+=": "ADD_ASSIGN_OP",
+    "-=": "SUB_ASSIGN_OP",
+    "*=": "MUL_ASSIGN_OP",
+    "/=": "DIV_ASSIGN_OP",
+    "%=": "MOD_ASSIGN_OP",
+    "**=": "POW_ASSIGN_OP",
+    "//=": "FDIV_ASSIGN_OP",
 
     # Comparison
-    ">": "LESS THAN",
-    "<": "GREATER THAN",
-    ">=": "LESS THAN / EQUALS",
-    "<=": "GREATER THAN / EQUALS",
-    "==": "EQUALS",
-    "!=": "NOT EQUALS",
+    ">": "LT_OP",
+    "<": "GT_OP",
+    ">=": "LTE_OP",
+    "<=": "GTE_OP",
+    "==": "EQ_OP",
+    "!=": "NEQ_OP",
 
     # Bitwise
-    "&": "BITWISE AND",
-    "|": "BITWISE OR",
-    "^": "BITWISE XOR",
-    "~": "BITWISE NOT",
-    "<<": "BITWISE LEFT SHIFT",
-    ">>": "BITWISE RIGHT SHIFT",
+    "&": "BW_AND_OP",
+    "|": "BW_OR_OP",
+    "^": "BW_XOR_OP",
+    "~": "BW_NOT_OP",
+    "<<": "BW_LSHIFT_OP",
+    ">>": "BW_RSHIFT_OP",
 }
 
 WORD_OPERATORS = {
     # Logical
-    "and": "LOGICAL AND",
-    "or": "LOGICAL OR",
-    "not": "LOGICAL NOT",
+    "and": "AND_OP",
+    "or": "OR_OP",
+    "not": "NOT_OP",
 
     # Identity
-    "is": "IDENTITY",
+    "is": "IDENT_OP",
 
     # Membership
-    "in": "MEMBERSHIP",
+    "in": "MEMBER_OP",
 }
 
 DELIMITERS = {
-    "(": "LEFT PARENTHESIS",
-    ")": "RIGHT PARENTHESIS",
-    "[": "LEFT BRACKET",
-    "]": "RIGHT BRACKET",
-    "{": "LEFT BRACE",
-    "}": "RIGHT BRACE",
-    ";": "SEMICOLON",
-    ",": "COMMA"
+    "(": "LPAREN_DELIM",
+    ")": "RPAREN_DELIM",
+    "[": "LBRACK_DELIM",
+    "]": "RBRACK_DELIM",
+    "{": "LBRACE_DELIM",
+    "}": "RBRACE_DELIM",
+    ";": "SEMI_DELIN",
+    ",": "COMMA_DELIM"
 }

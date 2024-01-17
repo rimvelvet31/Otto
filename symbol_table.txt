@@ -1,12 +1,12 @@
 LEXEME                                  TOKEN                                   
 # Invalid                               COMMENT                                 
-+first_name                             INVALID                                 
-last-name                               INVALID                                 
-123age                                  INVALID                                 
-number@1                                INVALID                                 
-$address                                INVALID                                 
-age?                                    INVALID                                 
-no!                                     INVALID                                 
++first_name                             INVALID_TOKEN                           
+last-name                               INVALID_TOKEN                           
+123age                                  INVALID_TOKEN                           
+number@1                                INVALID_TOKEN                           
+$address                                INVALID_TOKEN                           
+age?                                    INVALID_TOKEN                           
+no!                                     INVALID_TOKEN                           
 # Valid                                 COMMENT                                 
 pl_name                                 IDENTIFIER                              
 =                                       ASSIGNMENT                              
