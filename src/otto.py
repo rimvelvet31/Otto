@@ -108,7 +108,7 @@ class Lexer:
             return Token(WORD_OPERATORS[word], word)
 
         if word in RESWORDS:
-            return Token("RESERVED WORD", word)
+            return Token("RESWORD", word)
 
         if word in KEYWORDS:
             return Token("KEYWORD", word)
@@ -123,7 +123,7 @@ class Lexer:
             keyword = word_table[word][0]
             noise_word = word_table[word][1]
 
-            return [Token("KEYWORD", keyword), Token("NOISE WORD", noise_word)]
+            return [Token("KEYWORD", keyword), Token("NOISE_WORD", noise_word)]
 
         if IDENTIFIER_REGEX.match(word):
             return Token("IDENTIFIER", word)
@@ -154,7 +154,7 @@ class Lexer:
 
         # Raise error if string is not properly terminated
         if self.current_char != quote:
-            return Token("UNTERMINATED STRING", f'"{strng}')
+            return Token("UNCLOSED_STR", f'"{strng}')
 
         self.advance()  # Consume closing quote
 
@@ -216,14 +216,14 @@ class Lexer:
         while (self.current_char is not None) and (self.current_char != "\n"):
             comment_text += self.current_char
             self.advance()
-        return Token("COMMENT", comment_text)
+        return Token("SL_COMMENT", comment_text)
 
     def make_invalid(self, text=""):
         while (self.current_char is not None) and (self.current_char != " "):
             text += self.current_char
             self.advance()
 
-        return Token("INVALID", text)
+        return Token("INVALID_TOKEN", text)
 
 
 # RUN
