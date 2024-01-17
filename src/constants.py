@@ -106,6 +106,6 @@ DELIMITERS = {
     "]": "RBRACK_DELIM",
     "{": "LBRACE_DELIM",
     "}": "RBRACE_DELIM",
-    ";": "SEMI_DELIN",
+    ";": "SEMI_DELIM",
     ",": "COMMA_DELIM"
 }
