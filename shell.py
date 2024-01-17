@@ -19,16 +19,16 @@ if not FILE_PATH.endswith(".otto"):
 symbol_table = []  # To store lexemes and tokens
 
 with open(FILE_PATH, "r", encoding="utf-8") as file:
-    lines = file.readlines()
+    code = file.read()
 
-for line in lines:
-    line = line.strip()
-    tokens = otto.run(f"<{FILE_PATH}>", line)
+    tokens = otto.run(f"<{FILE_PATH}>", code)
 
     for token in tokens:
         lexeme = token.value
         token_type = token.type
-        symbol_table.append((lexeme.ljust(40), token_type.ljust(40)))
+
+        symbol_table.append([lexeme, token_type])
+
 
 # Write symbol table to a text file
 OUTPUT_FILE = "symbol_table.txt"
@@ -36,5 +36,8 @@ OUTPUT_FILE = "symbol_table.txt"
 with open(OUTPUT_FILE, "w", encoding="utf-8") as output_file:
     output_file.write("LEXEME".ljust(40) + "TOKEN".ljust(40) + "\n")
 
-    for lexeme, token_type in symbol_table:
-        output_file.write(f"{lexeme}{token_type}\n")
+    for token_pair in symbol_table:
+        lexeme = token_pair[0]
+        token = token_pair[1]
+
+        output_file.write(lexeme.ljust(40) + token.ljust(40) + "\n")

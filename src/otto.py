@@ -28,8 +28,8 @@ class Lexer:
 
         while self.current_char is not None:
 
-            # Ignore spaces and tabs
-            if self.current_char in " \t":
+            # Ignore whitespace
+            if self.current_char.isspace():
                 self.advance()
 
             # Numbers
@@ -209,13 +209,30 @@ class Lexer:
         return Token(token, operator_type)
 
     def make_comment(self):
-        comment_text = self.current_char
-        self.advance()  # Consume the "#"
+        comment_text = self.current_char  # Consume opening "#"
+        self.advance()
 
-        # Treat everything after the "#" but before a newline as a comment
+        # Multi-line comment
+        if self.current_char == "*":
+            comment_text += self.current_char  # Consume opening "*"
+            self.advance()
+
+            while self.current_char != "*" and self.peek() != "#":
+                comment_text += self.current_char
+                self.advance()
+
+            # Consume closing "*#"
+            for _ in range(2):
+                comment_text += self.current_char
+                self.advance()
+
+            return Token("ML_COMMENT", comment_text)
+
+        # Single-line comment
         while (self.current_char is not None) and (self.current_char != "\n"):
             comment_text += self.current_char
             self.advance()
+
         return Token("SL_COMMENT", comment_text)
 
     def make_invalid(self, text=""):
@@ -224,6 +241,10 @@ class Lexer:
             self.advance()
 
         return Token("INVALID_TOKEN", text)
+
+    def peek(self, offset=1):
+        peek_idx = self.pos.idx + offset
+        return self.text[peek_idx] if peek_idx < len(self.text) else None
 
 
 # RUN
