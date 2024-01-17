@@ -33,7 +33,7 @@ class Lexer:
                 self.advance()
 
             # Numbers
-            elif self.current_char in DIGITS:
+            elif self.current_char.isdigit():
                 tokens.append(self.make_num())
 
             # Tokenize operators
@@ -41,7 +41,7 @@ class Lexer:
                 tokens.append(self.make_operator(self.current_char))
 
             # Identifiers, Keywords, Reserved words, Noise words
-            elif self.current_char in LETTERS:
+            elif self.current_char.isalpha():
                 word_token = self.make_word()
 
                 # To handle noise words

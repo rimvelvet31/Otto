@@ -29,6 +29,7 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
 
         symbol_table.append([lexeme, token_type])
 
+    print(symbol_table)
 
 # Write symbol table to a text file
 OUTPUT_FILE = "symbol_table.txt"
