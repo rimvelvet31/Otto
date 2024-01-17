@@ -1,16 +1,8 @@
 LEXEME                                  TOKEN                                   
-# Invalid                               COMMENT                                 
-+first_name                             INVALID_TOKEN                           
-last-name                               INVALID_TOKEN                           
-123age                                  INVALID_TOKEN                           
-number@1                                INVALID_TOKEN                           
-$address                                INVALID_TOKEN                           
-age?                                    INVALID_TOKEN                           
-no!                                     INVALID_TOKEN                           
-# Valid                                 COMMENT                                 
-pl_name                                 IDENTIFIER                              
-=                                       ASSIGNMENT                              
-"Otto"                                  STRING                                  
-age                                     IDENTIFIER                              
-=                                       ASSIGNMENT                              
-0                                       INT                                     
+if                                      KEYWORD                                 
+(                                       LPAREN_DELIM                            
+true                                    RESWORD                                 
+)                                       RPAREN_DELIM                            
+{                                       LBRACE_DELIM                            
+"Hello"                                 STRING                                  
+}                                       RBRACE_DELIM                            
