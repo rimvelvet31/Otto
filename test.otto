@@ -1,3 +1,12 @@
-def greet () {
-  "Hello"
-}
+# Valid
+user
+first_name
+num1
+first-name
+
+# Invalid
+123var
+$user
+first+name
+person@
+
