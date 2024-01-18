@@ -66,9 +66,7 @@ class Lexer:
 
             # Tokenize delimiters
             elif self.current_char in DELIMITERS:
-                token = DELIMITERS.get(self.current_char)
-                tokens.append(Token(token, self.current_char))
-                self.advance()
+                tokens.append(self.make_delim())
 
             # Invalid char
             else:
@@ -85,7 +83,7 @@ class Lexer:
             num += self.current_char
             self.advance()
 
-        # Checks if the next char is a letter (identifiers cannot start with numbers)
+        # This is when a number is used to start an identifier
         if self.current_char is not None and self.current_char in LETTERS:
             return self.make_invalid(num)
 
@@ -100,7 +98,7 @@ class Lexer:
     def make_word(self):
         word = ""
 
-        while (self.current_char is not None) and (self.current_char != " "):
+        while (self.current_char is not None) and self.current_char in VALID_IDENTIFIER_CHARS:
             word += self.current_char
             self.advance()
 
@@ -235,8 +233,15 @@ class Lexer:
 
         return Token("SL_COMMENT", comment_text)
 
+    def make_delim(self):
+        delim_char = self.current_char
+        delim_type = DELIMITERS.get(delim_char)
+        self.advance()
+
+        return Token(delim_type, delim_char)
+
     def make_invalid(self, text=""):
-        while (self.current_char is not None) and (self.current_char != " "):
+        while (self.current_char is not None) and (not self.current_char.isspace()):
             text += self.current_char
             self.advance()
 

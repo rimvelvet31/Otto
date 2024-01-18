@@ -1,8 +1,14 @@
 LEXEME                                  TOKEN                                   
-def                                     KEYWORD                                 
-greet                                   IDENTIFIER                              
-(                                       LPAREN_DELIM                            
-)                                       RPAREN_DELIM                            
-{                                       LBRACE_DELIM                            
-"Hello"                                 STRING                                  
-}                                       RBRACE_DELIM                            
+# Valid                                 SL_COMMENT                              
+user                                    IDENTIFIER                              
+first_name                              IDENTIFIER                              
+num1                                    IDENTIFIER                              
+first                                   IDENTIFIER                              
+-name                                   INVALID_TOKEN                           
+# Invalid                               SL_COMMENT                              
+123var                                  INVALID_TOKEN                           
+$user                                   INVALID_TOKEN                           
+first                                   IDENTIFIER                              
++name                                   INVALID_TOKEN                           
+person                                  IDENTIFIER                              
+@                                       INVALID_TOKEN                           
