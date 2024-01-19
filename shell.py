@@ -18,6 +18,7 @@ if not FILE_PATH.endswith(".otto"):
 # File is valid
 symbol_table = []  # To store lexemes and tokens
 
+# Process and scan file for tokens
 with open(FILE_PATH, "r", encoding="utf-8") as file:
     code = file.read()
 
@@ -29,11 +30,10 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
 
         symbol_table.append([lexeme, token_type])
 
-    print(symbol_table)
 
-# Write symbol table to a text file
 OUTPUT_FILE = "symbol_table.txt"
 
+# Write symbol table to output file
 with open(OUTPUT_FILE, "w", encoding="utf-8") as output_file:
     output_file.write("LEXEME".ljust(40) + "TOKEN".ljust(40) + "\n")
 
