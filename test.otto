@@ -2,11 +2,21 @@
 user
 first_name
 num1
-first-name
+greet("Hello")
+utter("Otto")
+find(user)
+user = "user1"
 
 # Invalid
 123var
 $user
 first+name
 person@
+
+
+
+
+#*
+comment
+*#
 
