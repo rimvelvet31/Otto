@@ -1,5 +1,6 @@
 import os
 import sys
+from tabulate import tabulate
 from src import otto
 
 # Register otto file here
@@ -7,12 +8,10 @@ FILE_PATH = "test.otto"
 
 
 if not os.path.isfile(FILE_PATH):
-    print(f"File '{FILE_PATH}' does not exist")
-    sys.exit()
+    sys.exit(f"ERROR: File '{FILE_PATH}' does not exist")
 
 if not FILE_PATH.endswith(".otto"):
-    print(f"File '{FILE_PATH}' is not a valid .otto file")
-    sys.exit()
+    sys.exit(f"ERROR: File '{FILE_PATH}' is not a valid .otto file")
 
 
 # File is valid
@@ -22,8 +21,10 @@ symbol_table = []  # To store lexemes and tokens
 with open(FILE_PATH, "r", encoding="utf-8") as file:
     code = file.read()
 
+    # Generate list of Token objects with attributes: type, value
     tokens = otto.run(f"<{FILE_PATH}>", code)
 
+    # Extract lexemes and tokens
     for token in tokens:
         lexeme = token.value.strip()
         token_type = token.type
@@ -35,10 +36,5 @@ OUTPUT_FILE = "symbol_table.txt"
 
 # Write symbol table to output file
 with open(OUTPUT_FILE, "w", encoding="utf-8") as output_file:
-    output_file.write("LEXEME".ljust(40) + "TOKEN".ljust(40) + "\n")
-
-    for token_pair in symbol_table:
-        lexeme = token_pair[0]
-        token = token_pair[1]
-
-        output_file.write(lexeme.ljust(40) + token.ljust(40) + "\n")
+    output_file.write(tabulate(symbol_table, headers=[
+                      "LEXEME", "TOKEN"], tablefmt="pretty"))
