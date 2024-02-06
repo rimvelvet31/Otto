@@ -79,3 +79,12 @@ class WhileStmtNode:
 
     def __repr__(self):
         return f"while {self.condition} {self.body}"
+
+
+class InputStmtNode:
+    def __init__(self, identifier, prompt):
+        self.identifier = identifier
+        self.prompt = prompt
+
+    def __repr__(self):
+        return f"{self.identifier.value} = input({self.prompt})"
