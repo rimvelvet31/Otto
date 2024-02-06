@@ -1,9 +1,10 @@
-+--------+------------+
-| LEXEME |   TOKEN    |
-+--------+------------+
-|   1    |    INT     |
-|   <=   |   GTE_OP   |
-|   3    |    INT     |
-|   ;    | SEMI_DELIM |
-|  EOF   |    EOF     |
-+--------+------------+
++----------------+--------------+
+|     LEXEME     |    TOKEN     |
++----------------+--------------+
+|     utter      |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+| "Hello world!" |    STRING    |
+|       )        | RPAREN_DELIM |
+|       ;        |  SEMI_DELIM  |
+|      EOF       |     EOF      |
++----------------+--------------+

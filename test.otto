@@ -1,1 +1,1 @@
-1 <= 3;
+utter("Hello world!");

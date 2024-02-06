@@ -32,4 +32,7 @@ class UnterminatedStrError(Error):
 # Parser Errors
 class InvalidSyntaxError(Error):
     def __init__(self, start_pos, end_pos, details=""):
+        self.advance_count = 0
+        self.error = f"Invalid Syntax: {details}"
+        self.node = None
         super().__init__(start_pos, end_pos, "Invalid Syntax", details)

@@ -306,6 +306,13 @@ class Parser:
         res.register_advancement()
         self.read_token()
 
+        # Check if next token is ";"
+        if not self.current_token.type == "SEMI_DELIM":
+            return self.return_error("Expected ';'")
+        # Read ";" token
+        res.register_advancement()
+        self.read_token()
+
         return res.success(OutputStmtNode(value))
 
     def condition_stmt(self):
