@@ -28,12 +28,12 @@ class Parser:
             return res.failure(InvalidSyntaxError(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
-                "Expected '+', '-', '*', '/', '**', '==', '!=', '<', '>', <=', '>=', 'and' or 'or'"
+                "Expected arithmetic or boolean operator"
             ))
 
         return res
 
-    # NON-TERMINAL METHODS
+    # LITERALS
     def atom(self):
         res = ParseResult()
         token = self.current_token
@@ -77,42 +77,30 @@ class Parser:
                     "Expected ')'"
                 ))
 
+        # DISREGARD FOR NOW
         # For list expressions
-        elif token.type == "LBRACK_DELIM":
-            list_expr = res.register(self.list_expr())
-            if res.error:
-                return res
-            return res.success(list_expr)
-
-        elif token.matches("KEYWORD", "if"):
-            condition_stmt = res.register(self.condition_stmt())
-            if res.error:
-                return res
-            return res.success(condition_stmt)
-
-        elif token.matches("KEYWORD", "for"):
-            pass
-
-        elif token.matches("KEYWORD", "while"):
-            while_stmt = res.register(self.while_stmt())
-            if res.error:
-                return res
-            return res.success(while_stmt)
+        # elif token.type == "LBRACK_DELIM":
+        #     list_expr = res.register(self.list_expr())
+        #     if res.error:
+        #         return res
+        #     return res.success(list_expr)
 
         return res.failure(InvalidSyntaxError(
             token.start_pos,
             token.end_pos,
-            "Expected int, float, identifier, '+', '-', , '[', or '('"
+            "Expected a literal value (int, float, string, identifier)"
         ))
 
+    # ARITHMETIC EXPRESSIONS
     def power(self):
         return self.binary_op(self.atom, ("POW_OP",), self.factor)
 
+    # For unary operation or exponentiationq
     def factor(self):
         res = ParseResult()
         token = self.current_token
 
-        # For unary operation
+        # For unary operation (positive or negative nums)
         if token.type in ("ADD_OP", "SUB_OP"):
             res.register_advancement()
             self.read_token()
@@ -126,18 +114,21 @@ class Parser:
         # For exponentiation
         return self.power()
 
+    # For multiplication or division
     def term(self):
         return self.binary_op(self.factor, ("MUL_OP", "DIV_OP"))
 
-    def arith_expr(self):
+    # For addition or subtraction
+    def add_sub_expr(self):
         return self.binary_op(self.term, ("ADD_OP", "SUB_OP"))
 
+    # BOOLEAN EXPRESSIONS
     def comp_expr(self):
         res = ParseResult()
 
         if self.current_token.type == "NOT_OP":
             # Get "not" token
-            op_token = self.current_token
+            not_token = self.current_token
             res.register_advancement()
             self.read_token()
 
@@ -147,11 +138,11 @@ class Parser:
             if res.error:
                 return res
 
-            res.success(UnaryOpNode(op_token, node))
+            res.success(UnaryOpNode(not_token, node))
 
-        # For relational expressions
+        # For binary boolean expressions
         node = res.register(self.binary_op(
-            self.arith_expr,
+            self.add_sub_expr,
             ("LT_OP", "GT_OP", "LTE_OP", "GTE_OP", "EQ_OP", "NEQ_OP"))
         )
 
@@ -188,13 +179,28 @@ class Parser:
 
             # TODO add identifier in arith & bool expressions
 
+        # For output statement
         if self.current_token.matches("KEYWORD", "utter"):
             output_stmt = res.register(self.output_stmt(res))
             if res.error:
                 return res
             return res.success(output_stmt)
 
-        # For comparison expressions
+        # For condition statements
+        if self.current_token.matches("KEYWORD", "if"):
+            condition_stmt = res.register(self.condition_stmt())
+            if res.error:
+                return res
+            return res.success(condition_stmt)
+
+        # For iterative statements
+        if self.current_token.matches("KEYWORD", "for"):
+            pass
+
+        if self.current_token.matches("KEYWORD", "while"):
+            pass
+
+        # TODO For arithmetic or boolean expressions
         node = res.register(
             self.binary_op(self.comp_expr, ("AND_OP", "OR_OP"))
         )
@@ -203,7 +209,7 @@ class Parser:
             return res.failure(InvalidSyntaxError(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
-                "Expected int, float, identifier, '+', '-', '(', or 'not'"
+                "Expected a statement or expression"
             ))
 
         return res.success(node)
