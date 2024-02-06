@@ -1,11 +1,9 @@
-+-------------+--------------+
-|   LEXEME    |    TOKEN     |
-+-------------+--------------+
-|     age     |  IDENTIFIER  |
-|      =      |  ASSIGN_OP   |
-|    input    |   KEYWORD    |
-|      (      | LPAREN_DELIM |
-| "enter age" |    STRING    |
-|      )      | RPAREN_DELIM |
-|     EOF     |     EOF      |
-+-------------+--------------+
++---------------+--------------+
+|    LEXEME     |    TOKEN     |
++---------------+--------------+
+|     utter     |   KEYWORD    |
+|       (       | LPAREN_DELIM |
+| "Hello world" |    STRING    |
+|       )       | RPAREN_DELIM |
+|      EOF      |     EOF      |
++---------------+--------------+

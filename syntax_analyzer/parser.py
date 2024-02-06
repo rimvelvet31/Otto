@@ -167,7 +167,7 @@ class Parser:
     def stmt(self):
         res = ParseResult()
 
-        # For assignment or boolean expressions
+        # For assignment or input statements
         if self.current_token.type == "IDENTIFIER":
             identifier = self.current_token
             res.register_advancement()
@@ -187,6 +187,12 @@ class Parser:
                 return self.assign_stmt(res, identifier)
 
             # TODO add identifier in arith & bool expressions
+
+        if self.current_token.matches("KEYWORD", "utter"):
+            output_stmt = res.register(self.output_stmt(res))
+            if res.error:
+                return res
+            return res.success(output_stmt)
 
         # For comparison expressions
         node = res.register(
@@ -243,11 +249,7 @@ class Parser:
 
         # Check if next token is "("
         if not self.current_token.type == "LPAREN_DELIM":
-            return res.failure(InvalidSyntaxError(
-                self.current_token.start_pos,
-                self.current_token.end_pos,
-                "Expected '('"
-            ))
+            return self.return_error("Expected '('")
         # Read "(" token
         res.register_advancement()
         self.read_token()
@@ -257,19 +259,36 @@ class Parser:
 
         # Check if next token is ")"
         if not self.current_token.type == "RPAREN_DELIM":
-            return res.failure(InvalidSyntaxError(
-                self.current_token.start_pos,
-                self.current_token.end_pos,
-                "Expected ')'"
-            ))
+            self.return_error("Expected ')'")
         # Read ")" token
         res.register_advancement()
         self.read_token()
 
         return res.success(InputStmtNode(identifier, prompt))
 
-    def output_stmt(self):
-        pass
+    def output_stmt(self, res):
+        # Read "utter" keyword
+        res.register_advancement()
+        self.read_token()
+
+        # Check if next token is "("
+        if not self.current_token.type == "LPAREN_DELIM":
+            return self.return_error("Expected '('")
+        # Read "(" token
+        res.register_advancement()
+        self.read_token()
+
+        # Parse output value
+        value = res.register(self.atom())
+
+        # Check if next token is ")"
+        if not self.current_token.type == "RPAREN_DELIM":
+            return self.return_error("Expected ')'")
+        # Read ")" token
+        res.register_advancement()
+        self.read_token()
+
+        return res.success(OutputStmtNode(value))
 
     def condition_stmt(self):
         res = ParseResult()
@@ -385,6 +404,7 @@ class Parser:
         res.register_advancement()
         self.read_token()
 
+    # DISREGARD FOR NOW
     def list_expr(self):
         res = ParseResult()
         elements = []
@@ -429,3 +449,11 @@ class Parser:
             ))
 
         return res.success(ListNode(elements))
+
+    # HELPER METHODS
+    def return_error(self, message):
+        return InvalidSyntaxError(
+            self.current_token.start_pos,
+            self.current_token.end_pos,
+            message
+        )
