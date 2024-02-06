@@ -88,3 +88,11 @@ class InputStmtNode:
 
     def __repr__(self):
         return f"{self.identifier.value} = input({self.prompt})"
+
+
+class OutputStmtNode:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return f"utter({self.value})"
