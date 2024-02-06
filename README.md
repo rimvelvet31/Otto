@@ -22,6 +22,7 @@ Enter Otto, a high-level and dynamic programming language geared towards **autom
 
 1. Recommended to set up a venv first
    - Run `python -m venv venv`
+   - Activate `./venv/Scripts/activate`
 2. Install dependencies
    - Run `pip install -r requirements.txt`
 3. Edit Otto code to test in `test.otto`
