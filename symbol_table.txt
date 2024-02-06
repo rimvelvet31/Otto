@@ -1,36 +1,9 @@
-+------------------+--------------+
-|      LEXEME      |    TOKEN     |
-+------------------+--------------+
-|        if        |   KEYWORD    |
-|        (         | LPAREN_DELIM |
-|        1         |     INT      |
-|        ==        |    EQ_OP     |
-|        1         |     INT      |
-|        )         | RPAREN_DELIM |
-|        {         | LBRACE_DELIM |
-|      utter       |   KEYWORD    |
-|        (         | LPAREN_DELIM |
-|  "Hello world"   |    STRING    |
-|        )         | RPAREN_DELIM |
-|        }         | RBRACE_DELIM |
-|       elif       |   KEYWORD    |
-|        (         | LPAREN_DELIM |
-|        2         |     INT      |
-|        <         |    GT_OP     |
-|        3         |     INT      |
-|        )         | RPAREN_DELIM |
-|        {         | LBRACE_DELIM |
-|      utter       |   KEYWORD    |
-|        (         | LPAREN_DELIM |
-| "Good bye world" |    STRING    |
-|        )         | RPAREN_DELIM |
-|        }         | RBRACE_DELIM |
-|       else       |   KEYWORD    |
-|        {         | LBRACE_DELIM |
-|      utter       |   KEYWORD    |
-|        (         | LPAREN_DELIM |
-|      "haah"      |    STRING    |
-|        )         | RPAREN_DELIM |
-|        }         | RBRACE_DELIM |
-|       EOF        |     EOF      |
-+------------------+--------------+
++--------+------------+
+| LEXEME |   TOKEN    |
++--------+------------+
+|   1    |    INT     |
+|   <=   |   GTE_OP   |
+|   3    |    INT     |
+|   ;    | SEMI_DELIM |
+|  EOF   |    EOF     |
++--------+------------+

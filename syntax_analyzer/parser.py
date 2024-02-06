@@ -212,6 +212,18 @@ class Parser:
                 "Expected a statement or expression"
             ))
 
+        # Check for semicolon
+        if self.current_token.type == "SEMI_DELIM":
+            # Read ";" token
+            res.register_advancement()
+            self.read_token()
+        else:
+            return res.failure(InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ';' at the end of the statement"
+            ))
+
         return res.success(node)
 
     def binary_op(self, left_nonterminal, accepted_ops, right_nonterminal=None):
