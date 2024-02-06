@@ -1,31 +1,8 @@
-+------------+---------------+
-|   LEXEME   |     TOKEN     |
-+------------+---------------+
-|  # Valid   |  SL_COMMENT   |
-|    user    |  IDENTIFIER   |
-| first_name |  IDENTIFIER   |
-|    num1    |  IDENTIFIER   |
-|   greet    |  IDENTIFIER   |
-|     (      | LPAREN_DELIM  |
-|  "Hello"   |    STRING     |
-|     )      | RPAREN_DELIM  |
-|   utter    |    KEYWORD    |
-|     (      | LPAREN_DELIM  |
-|   "Otto"   |    STRING     |
-|     )      | RPAREN_DELIM  |
-|    find    |  IDENTIFIER   |
-|     (      | LPAREN_DELIM  |
-|    user    |  IDENTIFIER   |
-|     )      | RPAREN_DELIM  |
-|    user    |  IDENTIFIER   |
-|     =      |   ASSIGN_OP   |
-|  "user1"   |    STRING     |
-| # Invalid  |  SL_COMMENT   |
-|   123var   | INVALID_TOKEN |
-|   $user    | INVALID_TOKEN |
-| first+name | INVALID_TOKEN |
-|  person@   | INVALID_TOKEN |
-|     #*     |  ML_COMMENT   |
-|  comment   |               |
-|     *#     |               |
-+------------+---------------+
++--------+--------------+
+| LEXEME |    TOKEN     |
++--------+--------------+
+|   [    | LBRACK_DELIM |
+|   12   |     INT      |
+|   ]    | RBRACK_DELIM |
+|  EOF   |     EOF      |
++--------+--------------+

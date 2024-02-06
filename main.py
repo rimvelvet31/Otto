@@ -1,7 +1,9 @@
 import os
 import sys
 from tabulate import tabulate
-from src import otto
+
+from lexer.lexer import Lexer
+from syntax_analyzer.parser import Parser
 
 # Register otto file here
 FILE_PATH = "test.otto"
@@ -21,8 +23,9 @@ symbol_table = []  # To store lexemes and tokens
 with open(FILE_PATH, "r", encoding="utf-8") as file:
     code = file.read()
 
-    # Generate list of Token objects with attributes: type, value
-    tokens = otto.run(f"<{FILE_PATH}>", code)
+    # LEXER: Generate list of tokens
+    lexer = Lexer(f"<{FILE_PATH}>", code)
+    tokens = lexer.tokenize()
 
     # Extract lexemes and tokens
     for token in tokens:
@@ -31,6 +34,15 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
 
         symbol_table.append([lexeme, token_type])
 
+    # PARSER: Generate parse tree
+    parser = Parser(tokens)
+
+    ast = parser.otto_progstmt()
+
+    if ast.error:
+        print(ast.error)
+    else:
+        print(ast.node)
 
 OUTPUT_FILE = "symbol_table.txt"
 

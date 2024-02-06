@@ -1,12 +1,26 @@
-from src.constants import *
-from src.regex import *
-from src.position import Position
+from lexer.constants import *
+from lexer.regex import *
+from lexer.position import Position
 
 
 class Token:
-    def __init__(self, type_, value):
+    def __init__(self, type_, value, start_pos, end_pos=None):
         self.type = type_
         self.value = value
+
+        if start_pos:
+            self.start_pos = start_pos.copy()
+
+            # end_pos is not provided
+            self.end_pos = start_pos.copy()
+            self.end_pos.advance()
+
+        # end_pos is provided
+        if end_pos:
+            self.end_pos = end_pos.copy()
+
+    def matches(self, type, value=None):
+        return self.type == type and self.value == value
 
     def __repr__(self):
         return f"{self.type}:{self.value}"
@@ -73,13 +87,16 @@ class Lexer:
 
             # Invalid char
             else:
-                tokens.append(self.make_invalid())
+                tokens.append(self.make_invalid(self.pos))
 
+        # Indicates end of file
+        tokens.append(Token("EOF", "EOF", start_pos=self.pos))
         return tokens
 
     # Helper methods
-
     def make_num(self):
+        start_pos = self.pos.copy()
+
         num = ""
 
         while (self.current_char is not None) and (self.current_char in DIGITS + "."):
@@ -88,17 +105,19 @@ class Lexer:
 
         # This is when a number is used to start an identifier
         if self.current_char is not None and self.current_char in LETTERS:
-            return self.make_invalid(num)
+            return self.make_invalid(start_pos, num)
 
         if match_float(num):
-            return Token("FLOAT", num)
+            return Token("FLOAT", num, start_pos, self.pos)
 
         if match_int(num):
-            return Token("INT", num)
+            return Token("INT", num, start_pos, self.pos)
 
-        return self.make_invalid(num)
+        return self.make_invalid(start_pos, num)
 
     def make_word(self):
+        start_pos = self.pos.copy()
+
         word = ""
 
         while (self.current_char is not None) and self.current_char in VALID_IDENTIFIER_CHARS:
@@ -106,16 +125,16 @@ class Lexer:
             self.advance()
 
         if self.current_char not in VALID_IDENTIFIER_CHARS and self.current_char not in DELIMITERS and not self.current_char.isspace():
-            return self.make_invalid(word)
+            return self.make_invalid(start_pos, word)
 
         if word in WORD_OPERATORS:
-            return Token(WORD_OPERATORS[word], word)
+            return Token(WORD_OPERATORS[word], word, start_pos, self.pos)
 
         if word in RESWORDS:
-            return Token("RESWORD", word)
+            return Token("RESWORD", word, start_pos, self.pos)
 
         if word in KEYWORDS:
-            return Token("KEYWORD", word)
+            return Token("KEYWORD", word, start_pos, self.pos)
 
         if word in NOISE_WORDS:
             word_table = {
@@ -127,56 +146,63 @@ class Lexer:
             keyword = word_table[word][0]
             noise_word = word_table[word][1]
 
-            return [Token("KEYWORD", keyword), Token("NOISE_WORD", noise_word)]
+            return [
+                Token("KEYWORD", keyword, start_pos, self.pos),
+                Token("NOISE_WORD", noise_word, start_pos, self.pos)
+            ]
 
         if IDENTIFIER_REGEX.match(word):
-            return Token("IDENTIFIER", word)
+            return Token("IDENTIFIER", word, start_pos, self.pos)
 
-        return self.make_invalid(word)
+        return self.make_invalid(start_pos, word)
 
     def make_string(self, quote):
+        start_pos = self.pos.copy()
+
         escape_chars = {
             "n": "\n",  # newline
             "t": "\t",  # tab
             "r": "\r",  # carriage return
         }
 
-        strng = ""
+        str = ""
         escape_char = False
         self.advance()
 
         while (self.current_char is not None) and (self.current_char != quote or escape_char):
             if escape_char:
-                strng += escape_chars.get(self.current_char, self.current_char)
+                str += escape_chars.get(self.current_char, self.current_char)
                 escape_char = False
             else:
                 if self.current_char == "\\":
                     escape_char = True
                 else:
-                    strng += self.current_char
+                    str += self.current_char
             self.advance()
 
         # Raise error if string is not properly terminated
         if self.current_char != quote:
-            return Token("UNCLOSED_STR", f'"{strng}')
+            return Token("UNCLOSED_STR", f'"{str}', start_pos, self.pos)
 
         self.advance()  # Consume closing quote
 
-        str_with_quotes = f'"{strng}"' if quote == '"' else f"'{strng}'"
+        str_with_quotes = f'"{str}"' if quote == '"' else f"'{str}'"
 
         # Checks if the next char is a letter (identifiers cannot start with strings)
         if self.current_char is not None and self.current_char in LETTERS:
-            return self.make_invalid(str_with_quotes)
+            return self.make_invalid(start_pos, str_with_quotes)
 
-        return Token("STRING", str_with_quotes)
+        return Token("STRING", str_with_quotes, start_pos, self.pos)
 
     def make_operator(self, operator):
+        start_pos = self.pos.copy()
+
         operator_type = operator
         self.advance()
 
         # If current char is just "!", it should return an invalid token
         if operator == "!" and self.current_char != "=":
-            return self.make_invalid()
+            return self.make_invalid(start_pos)
 
         while (self.current_char is not None) and (self.current_char in "+-*/%=<>&|^~"):
             # Exponent
@@ -208,11 +234,13 @@ class Lexer:
 
         # Checks if the next char is a letter (identifiers cannot start with special chars)
         if self.current_char is not None and self.current_char in LETTERS:
-            return self.make_invalid(operator_type)
+            return self.make_invalid(start_pos, operator_type)
 
-        return Token(token, operator_type)
+        return Token(token, operator_type, start_pos, self.pos)
 
     def make_comment(self):
+        start_pos = self.pos.copy()
+
         comment_text = self.current_char  # Consume opening "#"
         self.advance()
 
@@ -230,28 +258,33 @@ class Lexer:
                 comment_text += self.current_char
                 self.advance()
 
-            return Token("ML_COMMENT", comment_text)
+            return Token("ML_COMMENT", comment_text, start_pos, self.pos)
 
         # Single-line comment
         while (self.current_char is not None) and (self.current_char != "\n"):
             comment_text += self.current_char
             self.advance()
 
-        return Token("SL_COMMENT", comment_text)
+        return Token("SL_COMMENT", comment_text, start_pos, self.pos)
 
     def make_delim(self):
+        start_pos = self.pos.copy()
+
         delim_char = self.current_char
         delim_type = DELIMITERS.get(delim_char)
         self.advance()
 
-        return Token(delim_type, delim_char)
+        return Token(delim_type, delim_char, start_pos, self.pos)
 
-    def make_invalid(self, text=""):
+    def make_invalid(self, start_pos, text=""):
+        # if not start_pos:
+        #     start_pos = self.pos.copy()
+
         while (self.current_char is not None) and (not self.current_char.isspace()):
             text += self.current_char
             self.advance()
 
-        return Token("INVALID_TOKEN", text)
+        return Token("INVALID_TOKEN", text, start_pos, self.pos)
 
     def peek(self, offset=1):
         peek_idx = self.pos.idx + offset
