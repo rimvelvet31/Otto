@@ -29,7 +29,7 @@ KEYWORDS = [
     "global",
     "if",
     "import",
-    "input"
+    "input",
     "lambda",
     "nonlocal",
     "Ottomate",

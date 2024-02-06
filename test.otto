@@ -1,1 +1,1 @@
-[12]
+age = input("enter age")

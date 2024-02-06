@@ -1,8 +1,11 @@
-+--------+--------------+
-| LEXEME |    TOKEN     |
-+--------+--------------+
-|   [    | LBRACK_DELIM |
-|   12   |     INT      |
-|   ]    | RBRACK_DELIM |
-|  EOF   |     EOF      |
-+--------+--------------+
++-------------+--------------+
+|   LEXEME    |    TOKEN     |
++-------------+--------------+
+|     age     |  IDENTIFIER  |
+|      =      |  ASSIGN_OP   |
+|    input    |   KEYWORD    |
+|      (      | LPAREN_DELIM |
+| "enter age" |    STRING    |
+|      )      | RPAREN_DELIM |
+|     EOF     |     EOF      |
++-------------+--------------+
