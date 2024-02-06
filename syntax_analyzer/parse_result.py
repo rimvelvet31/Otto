@@ -7,12 +7,12 @@ class ParseResult:
     def register_advancement(self):
         self.advance_count += 1
 
-    def register(self, parse_result):
-        self.advance_count += parse_result.advance_count
+    def register(self, res):
+        self.advance_count += res.advance_count
 
-        if parse_result.error:
-            self.error = parse_result.error
-        return parse_result.node
+        if res.error:
+            self.error = res.error
+        return res.node
 
     def success(self, node):
         self.node = node
