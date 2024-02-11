@@ -1,3 +1,7 @@
-while (true) {
-    utter("Hello Otto!");
+while(true) {
+    if (user == "Otto") {
+        utter("Hello Otto!");
+    } else {
+        utter("Hello World!");
+    }
 }

@@ -19,25 +19,23 @@ class Parser:
 
     def next_token(self):
         next_idx = self.token_idx + 1
+
         if next_idx < len(self.tokens):
             return self.tokens[next_idx].type
-        else:
-            return None
+        return None
 
     # Entry point of parser
     def otto_progstmt(self):
-        # TODO add support for multiple statements
-        res = self.stmt()
+        statements = []
 
-        # Check if res was returned even when are still unparsed tokens
-        # if self.current_token.type != "EOF":
-        #     return InvalidSyntaxError(
-        #         self.current_token.start_pos,
-        #         self.current_token.end_pos,
-        #         "Expected arithmetic or boolean operator"
-        #     )
+        # Parse multiple statements
+        while self.current_token is not None and self.current_token.type != "EOF":
+            stmt = self.stmt()
 
-        return res
+            if stmt is not None:
+                statements.append(stmt)
+
+        return ProgramNode(statements)
 
     # Statements
     def stmt(self):
