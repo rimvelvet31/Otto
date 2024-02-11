@@ -1,1 +1,1 @@
-utter("Hello world!");
+utter(1 + 13 * 2);
