@@ -14,6 +14,22 @@ class StringNode:
         return f"{self.token.value}"
 
 
+class BoolNode:
+    def __init__(self, token):
+        self.token = token
+
+    def __repr__(self):
+        return f"{self.token.value}"
+
+
+class NullNode:
+    def __init__(self, token):
+        self.token = token
+
+    def __repr__(self):
+        return f"{self.token.value}"
+
+
 class IdentifierNode:
     def __init__(self, token):
         self.token = token
@@ -74,12 +90,12 @@ class ConditionalStmtNode:
         self.else_case = else_case
 
     def __repr__(self):
-        condition_str = f"if {self.cases[0][0]} :\n\t{self.cases[0][1]}\n"
+        condition_str = f"if {self.cases[0][0]}:\n\t{self.cases[0][1]}\n"
 
         for condition, stmt in self.cases[1:]:
-            condition_str += f"elif {condition} :\n\t{stmt}\n"
+            condition_str += f"elif {condition}:\n\t{stmt}\n"
 
-        condition_str += f"else :\n\t{
+        condition_str += f"else:\n\t{
             self.else_case}" if self.else_case else ""
 
         return condition_str
@@ -95,4 +111,4 @@ class WhileStmtNode:
         self.body = body
 
     def __repr__(self):
-        return f"while ({self.condition}) :\n\t{self.body}"
+        return f"while ({self.condition}):\n\t{self.body}"

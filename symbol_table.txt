@@ -1,18 +1,16 @@
-+----------+--------------+
-|  LEXEME  |    TOKEN     |
-+----------+--------------+
-|  while   |   KEYWORD    |
-|    (     | LPAREN_DELIM |
-|    i     |  IDENTIFIER  |
-|    <     |    GT_OP     |
-| list_len |  IDENTIFIER  |
-|    )     | RPAREN_DELIM |
-|    {     | LBRACE_DELIM |
-|  utter   |   KEYWORD    |
-|    (     | LPAREN_DELIM |
-|    i     |  IDENTIFIER  |
-|    )     | RPAREN_DELIM |
-|    ;     |  SEMI_DELIM  |
-|    }     | RBRACE_DELIM |
-|   EOF    |     EOF      |
-+----------+--------------+
++---------------+--------------+
+|    LEXEME     |    TOKEN     |
++---------------+--------------+
+|     while     |   KEYWORD    |
+|       (       | LPAREN_DELIM |
+|     true      |   RESWORD    |
+|       )       | RPAREN_DELIM |
+|       {       | LBRACE_DELIM |
+|     utter     |   KEYWORD    |
+|       (       | LPAREN_DELIM |
+| "Hello Otto!" |    STRING    |
+|       )       | RPAREN_DELIM |
+|       ;       |  SEMI_DELIM  |
+|       }       | RBRACE_DELIM |
+|      EOF      |     EOF      |
++---------------+--------------+
