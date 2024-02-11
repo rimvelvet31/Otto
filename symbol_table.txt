@@ -1,52 +1,18 @@
-+------------+--------------+
-|   LEXEME   |    TOKEN     |
-+------------+--------------+
-|     if     |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|    age     |  IDENTIFIER  |
-|     >=     |    LTE_OP    |
-|     13     |     INT      |
-|     )      | RPAREN_DELIM |
-|     {      | LBRACE_DELIM |
-|   utter    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-| "Teenager" |    STRING    |
-|     )      | RPAREN_DELIM |
-|     ;      |  SEMI_DELIM  |
-|     }      | RBRACE_DELIM |
-|    elif    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|    age     |  IDENTIFIER  |
-|     >=     |    LTE_OP    |
-|     18     |     INT      |
-|     )      | RPAREN_DELIM |
-|     {      | LBRACE_DELIM |
-|   utter    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|  "Adult"   |    STRING    |
-|     )      | RPAREN_DELIM |
-|     ;      |  SEMI_DELIM  |
-|     }      | RBRACE_DELIM |
-|    elif    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|    age     |  IDENTIFIER  |
-|     >=     |    LTE_OP    |
-|     60     |     INT      |
-|     )      | RPAREN_DELIM |
-|     {      | LBRACE_DELIM |
-|   utter    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|  "Senior"  |    STRING    |
-|     )      | RPAREN_DELIM |
-|     ;      |  SEMI_DELIM  |
-|     }      | RBRACE_DELIM |
-|    else    |   KEYWORD    |
-|     {      | LBRACE_DELIM |
-|   utter    |   KEYWORD    |
-|     (      | LPAREN_DELIM |
-|   "Deds"   |    STRING    |
-|     )      | RPAREN_DELIM |
-|     ;      |  SEMI_DELIM  |
-|     }      | RBRACE_DELIM |
-|    EOF     |     EOF      |
-+------------+--------------+
++----------+--------------+
+|  LEXEME  |    TOKEN     |
++----------+--------------+
+|  while   |   KEYWORD    |
+|    (     | LPAREN_DELIM |
+|    i     |  IDENTIFIER  |
+|    <     |    GT_OP     |
+| list_len |  IDENTIFIER  |
+|    )     | RPAREN_DELIM |
+|    {     | LBRACE_DELIM |
+|  utter   |   KEYWORD    |
+|    (     | LPAREN_DELIM |
+|    i     |  IDENTIFIER  |
+|    )     | RPAREN_DELIM |
+|    ;     |  SEMI_DELIM  |
+|    }     | RBRACE_DELIM |
+|   EOF    |     EOF      |
++----------+--------------+

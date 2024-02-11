@@ -74,11 +74,25 @@ class ConditionalStmtNode:
         self.else_case = else_case
 
     def __repr__(self):
-        condition_str = f"if {self.cases[0][0]} : {self.cases[0][1]}\n"
+        condition_str = f"if {self.cases[0][0]} :\n\t{self.cases[0][1]}\n"
 
         for condition, stmt in self.cases[1:]:
-            condition_str += f"elif {condition} : {stmt}\n"
+            condition_str += f"elif {condition} :\n\t{stmt}\n"
 
-        condition_str += f"else : {self.else_case}" if self.else_case else ""
+        condition_str += f"else :\n\t{
+            self.else_case}" if self.else_case else ""
 
         return condition_str
+
+
+class ForStmtNode:
+    pass
+
+
+class WhileStmtNode:
+    def __init__(self, condition, body):
+        self.condition = condition
+        self.body = body
+
+    def __repr__(self):
+        return f"while ({self.condition}) :\n\t{self.body}"

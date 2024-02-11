@@ -89,10 +89,10 @@ class Parser:
 
         # Parse iterative statements
         elif self.current_token.matches("KEYWORD", "for"):
-            pass
+            return self.for_stmt()
 
         elif self.current_token.matches("KEYWORD", "while"):
-            pass
+            return self.while_stmt()
 
         # Parse arithmetic and/or boolean expressions
         expr = self.logical_expr()
@@ -233,7 +233,14 @@ class Parser:
         pass
 
     def while_stmt(self):
-        pass
+        # Read "while" keyword
+        self.read_token()
+
+        # Parse while condition and body
+        condition = self.condition_check()
+        body = self.code_block()
+
+        return WhileStmtNode(condition, body)
 
     # New Features
     def uniq_stmt(self):
