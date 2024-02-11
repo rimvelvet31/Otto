@@ -112,3 +112,11 @@ class WhileStmtNode:
 
     def __repr__(self):
         return f"while ({self.condition}):\n\t{self.body}"
+
+
+class ProgramNode:
+    def __init__(self, statements):
+        self.statements = statements
+
+    def __repr__(self):
+        return "\n".join([str(statement) for statement in self.statements])

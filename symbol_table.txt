@@ -1,16 +1,32 @@
-+---------------+--------------+
-|    LEXEME     |    TOKEN     |
-+---------------+--------------+
-|     while     |   KEYWORD    |
-|       (       | LPAREN_DELIM |
-|     true      |   RESWORD    |
-|       )       | RPAREN_DELIM |
-|       {       | LBRACE_DELIM |
-|     utter     |   KEYWORD    |
-|       (       | LPAREN_DELIM |
-| "Hello Otto!" |    STRING    |
-|       )       | RPAREN_DELIM |
-|       ;       |  SEMI_DELIM  |
-|       }       | RBRACE_DELIM |
-|      EOF      |     EOF      |
-+---------------+--------------+
++----------------+--------------+
+|     LEXEME     |    TOKEN     |
++----------------+--------------+
+|     while      |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+|      true      |   RESWORD    |
+|       )        | RPAREN_DELIM |
+|       {        | LBRACE_DELIM |
+|       if       |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+|      user      |  IDENTIFIER  |
+|       ==       |    EQ_OP     |
+|     "Otto"     |    STRING    |
+|       )        | RPAREN_DELIM |
+|       {        | LBRACE_DELIM |
+|     utter      |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+| "Hello Otto!"  |    STRING    |
+|       )        | RPAREN_DELIM |
+|       ;        |  SEMI_DELIM  |
+|       }        | RBRACE_DELIM |
+|      else      |   KEYWORD    |
+|       {        | LBRACE_DELIM |
+|     utter      |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+| "Hello World!" |    STRING    |
+|       )        | RPAREN_DELIM |
+|       ;        |  SEMI_DELIM  |
+|       }        | RBRACE_DELIM |
+|       }        | RBRACE_DELIM |
+|      EOF       |     EOF      |
++----------------+--------------+
