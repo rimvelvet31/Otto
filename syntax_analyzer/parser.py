@@ -98,7 +98,7 @@ class Parser:
             pass
 
         # For arithmetic or boolean expressions
-        expr = self.expr()
+        expr = self.logical_expr()
 
         # Check if expression ends with semicolon
         if self.current_token.type != "SEMI_DELIM":
@@ -113,7 +113,7 @@ class Parser:
 
     # Statement Methods
     def assign_stmt(self, identifier, op):
-        value = self.expr()
+        value = self.logical_expr()
 
         # Check if statement ends with semicolon
         if self.current_token.type != "SEMI_DELIM":
@@ -176,7 +176,7 @@ class Parser:
         self.read_token()
 
         # Parse output value
-        output = self.expr()
+        output = self.logical_expr()
 
         # Check if next token is ")"
         if self.current_token.type != "RPAREN_DELIM":
@@ -216,19 +216,31 @@ class Parser:
         # execute
         pass
 
-    # Operations (lowest to highest precedence: expr -> atom)
-    def expr(self):
-        # For arithmetic expressions
-        return self.add_subract()
+    # OPERATIONS (lowest to highest precedence: logical_expr -> atom)
 
-        # For boolean expressions
-        pass
+    # Boolean expressions
+    def logical_expr(self):
+        return self.binary_op(self.comparison_expr, ("AND_OP", "OR_OP"))
 
-    # For addition or subtraction
+    def comparison_expr(self):
+        # not
+        if self.current_token.type == "NOT_OP":
+            not_token = self.current_token
+            self.read_token()
+
+            node = self.comparison_expr()
+
+            return UnaryOpNode(not_token, node)
+
+        # Comparison operators
+        comparison_ops = ("LT_OP", "GT_OP", "LTE_OP",
+                          "GTE_OP", "EQ_OP", "NEQ_OP")
+        return self.binary_op(self.add_subract, comparison_ops)
+
+    # Arithmetic expressions
     def add_subract(self):
         return self.binary_op(self.modulo_multiply_divide, ("ADD_OP", "SUB_OP"))
 
-    # For multiplication or division
     def modulo_multiply_divide(self):
         return self.binary_op(self.factor, ("MOD_OP", "MUL_OP", "DIV_OP", "FDIV_OP"))
 
@@ -271,7 +283,7 @@ class Parser:
             self.read_token()
 
             # Get expression inside parenthesis
-            expr = self.expr()
+            expr = self.logical_expr()
 
             # Check if parenthesis is closed
             if self.current_token.type != "RPAREN_DELIM":
