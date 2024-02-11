@@ -2,7 +2,7 @@ import os
 import sys
 from tabulate import tabulate
 
-from lexer.lexer import Lexer
+from lexical_analyzer.lexer import Lexer
 from syntax_analyzer.parser import Parser
 
 # Register otto file here
@@ -27,11 +27,10 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
     lexer = Lexer(f"<{FILE_PATH}>", code)
     tokens = lexer.tokenize()
 
-    # Extract lexemes and tokens
+    # Extract lexemes & tokens to symbol table
     for token in tokens:
         lexeme = token.value.strip()
         token_type = token.type
-
         symbol_table.append([lexeme, token_type])
 
     # PARSER: Generate parse tree
@@ -39,9 +38,9 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
     ast = parser.otto_progstmt()
     print(ast)
 
+# Write symbol table to output file
 OUTPUT_FILE = "symbol_table.txt"
 
-# Write symbol table to output file
 with open(OUTPUT_FILE, "w", encoding="utf-8") as output_file:
     output_file.write(tabulate(symbol_table, headers=[
                       "LEXEME", "TOKEN"], tablefmt="pretty"))
