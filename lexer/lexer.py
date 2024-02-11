@@ -124,7 +124,7 @@ class Lexer:
             word += self.current_char
             self.advance()
 
-        if self.current_char not in VALID_IDENTIFIER_CHARS and self.current_char not in DELIMITERS and not self.current_char.isspace():
+        if self.current_char is not None and self.current_char not in VALID_IDENTIFIER_CHARS and self.current_char not in DELIMITERS and not self.current_char.isspace():
             return self.make_invalid(start_pos, word)
 
         if word in WORD_OPERATORS:

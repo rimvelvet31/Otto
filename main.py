@@ -36,13 +36,8 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
 
     # PARSER: Generate parse tree
     parser = Parser(tokens)
-
     ast = parser.otto_progstmt()
-
-    if ast.error:
-        print(ast.error)
-    else:
-        print(ast.node)
+    print(ast)
 
 OUTPUT_FILE = "symbol_table.txt"
 
