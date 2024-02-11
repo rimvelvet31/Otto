@@ -12,10 +12,15 @@ class Parser:
         self.token_idx += 1
 
         # Check if token index is within bounds
-        if self.token_idx < len(self.tokens):
+        while self.token_idx < len(self.tokens):
             self.current_token = self.tokens[self.token_idx]
 
-        return self.current_token
+            if self.current_token.type in ("SL_COMMENT", "ML_COMMENT"):
+                self.token_idx += 1  # Ignore comment tokens
+            else:
+                return self.current_token
+
+        return None
 
     def next_token(self):
         next_idx = self.token_idx + 1
@@ -32,6 +37,7 @@ class Parser:
         while self.current_token is not None and self.current_token.type != "EOF":
             stmt = self.stmt()
 
+            # Parse multiple statements
             if stmt is not None:
                 statements.append(stmt)
 
