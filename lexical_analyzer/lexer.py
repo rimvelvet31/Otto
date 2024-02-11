@@ -1,7 +1,7 @@
-from lexer.constants import *
-from lexer.regex import *
-from lexer.position import Position
-from lexer.token import Token
+from lexical_analyzer.constants import *
+from lexical_analyzer.regex import match_float, match_int, IDENTIFIER_REGEX
+from lexical_analyzer.position import Position
+from lexical_analyzer.token import Token
 
 
 class Lexer:
