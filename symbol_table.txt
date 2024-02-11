@@ -1,14 +1,16 @@
-+--------+--------------+
-| LEXEME |    TOKEN     |
-+--------+--------------+
-| utter  |   KEYWORD    |
-|   (    | LPAREN_DELIM |
-|   1    |     INT      |
-|   +    |    ADD_OP    |
-|   13   |     INT      |
-|   *    |    MUL_OP    |
-|   2    |     INT      |
-|   )    | RPAREN_DELIM |
-|   ;    |  SEMI_DELIM  |
-|  EOF   |     EOF      |
-+--------+--------------+
++--------+------------+
+| LEXEME |   TOKEN    |
++--------+------------+
+|  cond  | IDENTIFIER |
+|   =    | ASSIGN_OP  |
+|  not   |   NOT_OP   |
+|   a    | IDENTIFIER |
+|   !=   |   NEQ_OP   |
+|   b    | IDENTIFIER |
+|   or   |   OR_OP    |
+|   1    |    INT     |
+|   <=   |   GTE_OP   |
+|   2    |    INT     |
+|   ;    | SEMI_DELIM |
+|  EOF   |    EOF     |
++--------+------------+

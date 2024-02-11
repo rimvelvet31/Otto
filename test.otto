@@ -1,1 +1,1 @@
-utter(1 + 13 * 2);
+cond = not a != b or 1 <= 2;
