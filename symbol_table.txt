@@ -1,16 +1,52 @@
-+--------+------------+
-| LEXEME |   TOKEN    |
-+--------+------------+
-|  cond  | IDENTIFIER |
-|   =    | ASSIGN_OP  |
-|  not   |   NOT_OP   |
-|   a    | IDENTIFIER |
-|   !=   |   NEQ_OP   |
-|   b    | IDENTIFIER |
-|   or   |   OR_OP    |
-|   1    |    INT     |
-|   <=   |   GTE_OP   |
-|   2    |    INT     |
-|   ;    | SEMI_DELIM |
-|  EOF   |    EOF     |
-+--------+------------+
++------------+--------------+
+|   LEXEME   |    TOKEN     |
++------------+--------------+
+|     if     |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|    age     |  IDENTIFIER  |
+|     >=     |    LTE_OP    |
+|     13     |     INT      |
+|     )      | RPAREN_DELIM |
+|     {      | LBRACE_DELIM |
+|   utter    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+| "Teenager" |    STRING    |
+|     )      | RPAREN_DELIM |
+|     ;      |  SEMI_DELIM  |
+|     }      | RBRACE_DELIM |
+|    elif    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|    age     |  IDENTIFIER  |
+|     >=     |    LTE_OP    |
+|     18     |     INT      |
+|     )      | RPAREN_DELIM |
+|     {      | LBRACE_DELIM |
+|   utter    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|  "Adult"   |    STRING    |
+|     )      | RPAREN_DELIM |
+|     ;      |  SEMI_DELIM  |
+|     }      | RBRACE_DELIM |
+|    elif    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|    age     |  IDENTIFIER  |
+|     >=     |    LTE_OP    |
+|     60     |     INT      |
+|     )      | RPAREN_DELIM |
+|     {      | LBRACE_DELIM |
+|   utter    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|  "Senior"  |    STRING    |
+|     )      | RPAREN_DELIM |
+|     ;      |  SEMI_DELIM  |
+|     }      | RBRACE_DELIM |
+|    else    |   KEYWORD    |
+|     {      | LBRACE_DELIM |
+|   utter    |   KEYWORD    |
+|     (      | LPAREN_DELIM |
+|   "Deds"   |    STRING    |
+|     )      | RPAREN_DELIM |
+|     ;      |  SEMI_DELIM  |
+|     }      | RBRACE_DELIM |
+|    EOF     |     EOF      |
++------------+--------------+
