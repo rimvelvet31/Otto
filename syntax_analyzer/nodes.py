@@ -66,3 +66,19 @@ class OutputStmtNode:
 
     def __repr__(self):
         return f"utter({self.output});"
+
+
+class ConditionalStmtNode:
+    def __init__(self, cases, else_case):
+        self.cases = cases
+        self.else_case = else_case
+
+    def __repr__(self):
+        condition_str = f"if {self.cases[0][0]} : {self.cases[0][1]}\n"
+
+        for condition, stmt in self.cases[1:]:
+            condition_str += f"elif {condition} : {stmt}\n"
+
+        condition_str += f"else : {self.else_case}" if self.else_case else ""
+
+        return condition_str

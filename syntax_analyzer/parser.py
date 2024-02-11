@@ -30,12 +30,12 @@ class Parser:
         res = self.stmt()
 
         # Check if res was returned even when are still unparsed tokens
-        if self.current_token.type != "EOF":
-            return InvalidSyntaxError(
-                self.current_token.start_pos,
-                self.current_token.end_pos,
-                "Expected arithmetic or boolean operator"
-            )
+        # if self.current_token.type != "EOF":
+        #     return InvalidSyntaxError(
+        #         self.current_token.start_pos,
+        #         self.current_token.end_pos,
+        #         "Expected arithmetic or boolean operator"
+        #     )
 
         return res
 
@@ -83,12 +83,9 @@ class Parser:
         elif self.current_token.matches("KEYWORD", "utter"):
             return self.output_stmt()
 
-        # For condition statements
-        # if self.current_token.matches("KEYWORD", "if"):
-        #     condition_stmt = res.register(self.condition_stmt())
-        #     if res.error:
-        #         return res
-        #     return res.success(condition_stmt)
+        # Parse conditional statement
+        elif self.current_token.matches("KEYWORD", "if"):
+            return self.conditional_stmt()
 
         # Parse iterative statements
         elif self.current_token.matches("KEYWORD", "for"):
@@ -97,7 +94,7 @@ class Parser:
         elif self.current_token.matches("KEYWORD", "while"):
             pass
 
-        # For arithmetic or boolean expressions
+        # Parse arithmetic and/or boolean expressions
         expr = self.logical_expr()
 
         # Check if expression ends with semicolon
@@ -198,6 +195,39 @@ class Parser:
 
         return OutputStmtNode(output)
 
+    def conditional_stmt(self):
+        # Stores each if/elif's condition & body
+        cases = []
+        else_case = None
+
+        # Read "if" keyword
+        self.read_token()
+
+        # Parse if condition and body
+        if_condition = self.condition_check()
+        if_body = self.code_block()
+        cases.append((if_condition, if_body))
+
+        # Parse elif conditions and bodies
+        while self.current_token.matches("KEYWORD", "elif"):
+            # Read "elif" keyword
+            self.read_token()
+
+            # Parse elif condition and body
+            elif_condition = self.condition_check()
+            elif_body = self.code_block()
+            cases.append((elif_condition, elif_body))
+
+        # Parse else body
+        if self.current_token.matches("KEYWORD", "else"):
+            # Read "else" keyword
+            self.read_token()
+
+            # Parse else body
+            else_case = self.code_block()
+
+        return ConditionalStmtNode(cases, else_case)
+
     # Iterative statements
     def for_stmt(self):
         pass
@@ -217,7 +247,6 @@ class Parser:
         pass
 
     # OPERATIONS (lowest to highest precedence: logical_expr -> atom)
-
     # Boolean expressions
     def logical_expr(self):
         return self.binary_op(self.comparison_expr, ("AND_OP", "OR_OP"))
@@ -303,77 +332,6 @@ class Parser:
             "Expected a value"
         )
 
-    # BOOLEAN EXPRESSIONS
-    # def comp_expr(self):
-    #     res = ParseResult()
-
-    #     if self.current_token.type == "NOT_OP":
-    #         # Get "not" token
-    #         not_token = self.current_token
-    #         res.register_advancement()
-    #         self.read_token()
-
-    #         # Recursively get comparison expr
-    #         node = res.register(self.comp_expr())
-
-    #         if res.error:
-    #             return res
-
-    #         res.success(UnaryOpNode(not_token, node))
-
-    #     # For binary boolean expressions
-    #     node = res.register(self.binary_op(
-    #         self.add_sub_expr,
-    #         ("LT_OP", "GT_OP", "LTE_OP", "GTE_OP", "EQ_OP", "NEQ_OP"))
-    #     )
-
-    #     if res.error:
-    #         return res.failure(InvalidSyntaxError(
-    #             self.current_token.start_pos,
-    #             self.current_token.end_pos,
-    #             "Expected int, float, identifier, '+', '-', '(', or 'not'"
-    #         ))
-
-    #     return res.success(node)
-
-    # def condition_stmt(self):
-    #     res = ParseResult()
-
-    #     # Read "if" token
-    #     res.register_advancement()
-    #     self.read_token()
-
-    #     if_case = None
-    #     elif_cases = []
-    #     else_body = None
-
-    #     # if condition
-    #     self.cond_expr(res)
-
-    #     # if body
-    #     self.code_block(res)
-
-    #     # elifs
-    #     while self.current_token.matches("KEYWORD", "elif"):
-    #         res.register_advancement()
-    #         self.read_token()
-
-    #         # elif condition
-    #         self.cond_expr(res)
-
-    #         # elif body
-    #         self.code_block(res)
-
-    #     # else
-    #     if self.current_token.matches("KEYWORD", "else"):
-    #         res.register_advancement()
-    #         self.read_token()
-
-    #         # else body
-    #         self.code_block(res)
-
-    #     return res.success(ConditionStmtNode(if_case, elif_cases, else_body))
-
     # HELPER METHODS
     def binary_op(self, left_nonterminal, accepted_ops, right_nonterminal=None):
         # Both left and right nonterminals are the same
@@ -393,9 +351,33 @@ class Parser:
 
         return left_node
 
+    def condition_check(self):
+        # Check if next token is "("
+        if self.current_token.type != "LPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '('"
+            )
+        self.read_token()
+
+        # Parse condition expression
+        condition = self.logical_expr()
+
+        # Check if next token is ")"
+        if self.current_token.type != "RPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ')'"
+            )
+        self.read_token()
+
+        return condition
+
     def code_block(self):
         # Check if next token is "{"
-        if not self.current_token.type == "LBRACE_DELIM":
+        if self.current_token.type != "LBRACE_DELIM":
             return InvalidSyntaxError(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
@@ -407,7 +389,7 @@ class Parser:
         body = self.stmt()
 
         # Check if next token is "}"
-        if not self.current_token.type == "RBRACE_DELIM":
+        if self.current_token.type != "RBRACE_DELIM":
             return InvalidSyntaxError(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
@@ -416,29 +398,3 @@ class Parser:
         self.read_token()
 
         return body
-
-    # def cond_expr(self, res):
-    #     # Check if next token is "("
-    #     if not self.current_token.type == "LPAREN_DELIM":
-    #         return res.failure(InvalidSyntaxError(
-    #             self.current_token.start_pos,
-    #             self.current_token.end_pos,
-    #             "Expected '('"
-    #         ))
-    #     res.register_advancement()
-    #     self.read_token()
-
-    #     # TODO Get condition expr - change this to bool_expr later
-    #     res.register(self.stmt())
-    #     if res.error:
-    #         return res
-
-    #     # Check if next token is ")"
-    #     if not self.current_token.type == "RPAREN_DELIM":
-    #         return res.failure(InvalidSyntaxError(
-    #             self.current_token.start_pos,
-    #             self.current_token.end_pos,
-    #             "Expected ')'"
-    #         ))
-    #     res.register_advancement()
-    #     self.read_token()

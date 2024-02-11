@@ -1,1 +1,9 @@
-cond = not a != b or 1 <= 2;
+if (age >= 13) {
+    utter("Teenager"); 
+} elif (age >= 18) {
+    utter("Adult");
+} elif (age >= 60) {
+    utter("Senior");
+} else {
+    utter("Deds");
+}
