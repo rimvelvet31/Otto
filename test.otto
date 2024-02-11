@@ -1,9 +1,3 @@
-if (age >= 13) {
-    utter("Teenager"); 
-} elif (age >= 18) {
-    utter("Adult");
-} elif (age >= 60) {
-    utter("Senior");
-} else {
-    utter("Deds");
+while (i < list_len) {
+    utter(i);
 }
