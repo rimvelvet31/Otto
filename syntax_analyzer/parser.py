@@ -309,6 +309,16 @@ class Parser:
             self.read_token()
             return StringNode(token)
 
+        # Parse booleans
+        elif token.matches("RESWORD", "true") or token.matches("RESWORD", "false"):
+            self.read_token()
+            return BoolNode(token)
+
+        # Parse null
+        elif token.matches("RESWORD", "null"):
+            self.read_token()
+            return NullNode(token)
+
         # Parse identifiers
         elif token.type == "IDENTIFIER":
             self.read_token()
