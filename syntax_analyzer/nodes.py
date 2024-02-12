@@ -155,12 +155,13 @@ class TestStmtNode:
         return test_str
 
 
-class ProgramNode:
-    def __init__(self, statements):
-        self.statements = statements
+class ExecuteStmtNode:
+    def __init__(self, arr, func):
+        self.arr = arr
+        self.func = func
 
     def __repr__(self):
-        return "\n".join([str(statement) for statement in self.statements])
+        return f"execute({self.arr}, {self.func});"
 
 
 class CallNode:

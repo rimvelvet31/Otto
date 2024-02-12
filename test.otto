@@ -1,4 +1,1 @@
-for i in [1, 2, 4] {
-
-    utter("Hello");
-}
+execute(["1-1-24", "12:00am"], send_memo);

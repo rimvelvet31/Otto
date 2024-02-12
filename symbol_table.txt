@@ -1,22 +1,16 @@
-+---------+--------------+
-| LEXEME  |    TOKEN     |
-+---------+--------------+
-|   for   |   KEYWORD    |
-|    i    |  IDENTIFIER  |
-|   in    |  MEMBER_OP   |
-|    [    | LBRACK_DELIM |
-|    1    |     INT      |
-|    ,    | COMMA_DELIM  |
-|    2    |     INT      |
-|    ,    | COMMA_DELIM  |
-|    4    |     INT      |
-|    ]    | RBRACK_DELIM |
-|    {    | LBRACE_DELIM |
-|  utter  |   KEYWORD    |
-|    (    | LPAREN_DELIM |
-| "Hello" |    STRING    |
-|    )    | RPAREN_DELIM |
-|    ;    |  SEMI_DELIM  |
-|    }    | RBRACE_DELIM |
-|   EOF   |     EOF      |
-+---------+--------------+
++-----------+--------------+
+|  LEXEME   |    TOKEN     |
++-----------+--------------+
+|  execute  |   KEYWORD    |
+|     (     | LPAREN_DELIM |
+|     [     | LBRACK_DELIM |
+| "1-1-24"  |    STRING    |
+|     ,     | COMMA_DELIM  |
+| "12:00am" |    STRING    |
+|     ]     | RBRACK_DELIM |
+|     ,     | COMMA_DELIM  |
+| send_memo |  IDENTIFIER  |
+|     )     | RPAREN_DELIM |
+|     ;     |  SEMI_DELIM  |
+|    EOF    |     EOF      |
++-----------+--------------+
