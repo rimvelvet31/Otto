@@ -1,16 +1,12 @@
-+-----------+--------------+
-|  LEXEME   |    TOKEN     |
-+-----------+--------------+
-|  execute  |   KEYWORD    |
-|     (     | LPAREN_DELIM |
-|     [     | LBRACK_DELIM |
-| "1-1-24"  |    STRING    |
-|     ,     | COMMA_DELIM  |
-| "12:00am" |    STRING    |
-|     ]     | RBRACK_DELIM |
-|     ,     | COMMA_DELIM  |
-| send_memo |  IDENTIFIER  |
-|     )     | RPAREN_DELIM |
-|     ;     |  SEMI_DELIM  |
-|    EOF    |     EOF      |
-+-----------+--------------+
++--------+--------------+
+| LEXEME |    TOKEN     |
++--------+--------------+
+| utter  |   KEYWORD    |
+|   (    | LPAREN_DELIM |
+|   1    |     INT      |
+|   +    |    ADD_OP    |
+|   1    |     INT      |
+|   )    | RPAREN_DELIM |
+|   ;    |  SEMI_DELIM  |
+|  EOF   |     EOF      |
++--------+--------------+

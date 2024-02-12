@@ -1,1 +1,1 @@
-execute(["1-1-24", "12:00am"], send_memo);
+utter(1 + 1);

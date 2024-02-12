@@ -62,6 +62,8 @@ class UnaryOpNode:
         self.node = node
 
     def __repr__(self):
+        if self.op_token.value == "not":
+            return f"({self.op_token.value} {self.node})"
         return f"({self.op_token.value}{self.node})"
 
 
@@ -98,13 +100,21 @@ class ConditionalStmtNode:
         self.else_case = else_case
 
     def __repr__(self):
-        condition_str = f"if {self.cases[0][0]}:\n\t{self.cases[0][1]}\n"
+        condition_str = f"if ({self.cases[0][0]}) " + "{\n"
+        for stmt in self.cases[0][1]:
+            condition_str += f"\t{stmt}\n"
+        condition_str += "}\n"
 
-        for condition, stmt in self.cases[1:]:
-            condition_str += f"elif {condition}:\n\t{stmt}\n"
+        for condition, stmts in self.cases[1:]:
+            condition_str += f"elif ({condition}) " + "{\n"
+            for stmt in stmts:
+                condition_str += f"\t{stmt}\n"
+            condition_str += "}\n"
 
-        condition_str += f"else:\n\t{
-            self.else_case}" if self.else_case else ""
+        condition_str += "else " + "{\n"
+        for stmt in self.else_case:
+            condition_str += f"\t{stmt}\n"
+        condition_str += "}\n"
 
         return condition_str
 
@@ -116,7 +126,12 @@ class ForStmtNode:
         self.body = body
 
     def __repr__(self):
-        return f"for {self.loop_var} in {self.arr}"
+        for_str = f"for {self.loop_var.value} in {self.arr.value} " + "{\n"
+        for stmt in self.body:
+            for_str += f"\t{stmt}\n"
+        for_str += "}"
+
+        return for_str
 
 
 class WhileStmtNode:
@@ -125,7 +140,12 @@ class WhileStmtNode:
         self.body = body
 
     def __repr__(self):
-        return f"while ({self.condition}):\n\t{self.body}"
+        while_str = f"while ({self.condition})" + "{\n"
+        for stmt in self.body:
+            while_str += f"\t{stmt}\n"
+        while_str += "}"
+
+        return while_str
 
 
 class OttomateStmtNode:
@@ -149,8 +169,10 @@ class TestStmtNode:
         self.cases = cases
 
     def __repr__(self):
-        test_str = "test:"
-        test_str += "\n\t".join([str(case) for case in self.cases])
+        test_str = "test " + "{\n"
+        for case in self.cases:
+            test_str += f"\t{case}\n"
+        test_str += "}"
 
         return test_str
 
@@ -164,7 +186,7 @@ class ExecuteStmtNode:
         return f"execute({self.arr}, {self.func});"
 
 
-class CallNode:
+class FunctionCallNode:
     def __init__(self, atom, args):
         self.atom = atom
         self.args = args

@@ -86,7 +86,7 @@ class Parser:
 
             # For function calls
             if self.next_token() == "LPAREN_DELIM":
-                return self.call()
+                return self.function_call()
 
         # Parse output statement
         elif self.current_token.matches("KEYWORD", "utter"):
@@ -279,11 +279,18 @@ class Parser:
         # Get list variable
         arr = None
         if self.current_token.type == "IDENTIFIER":
-            arr = self.read_token()
+            arr = self.current_token
+            self.read_token()
         else:
             arr = self.list()
 
         # Parse for loop body
+        if self.current_token.type != "LBRACE_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '{'"
+            )
         body = self.code_block()
 
         return ForStmtNode(loop_var, arr, body)
@@ -387,7 +394,11 @@ class Parser:
         self.read_token()
 
         # Parse test cases
-        cases.append(self.call())
+        while self.current_token.type != "RBRACE_DELIM":
+            cases.append(self.function_call())
+
+            if self.current_token.type == "COMMA_DELIM":
+                self.read_token()
 
         # Check for "}"
         if self.current_token.type != "RBRACE_DELIM":
@@ -499,7 +510,7 @@ class Parser:
         return self.binary_op(self.atom, ("POW_OP",), self.factor)
 
     # For function calls
-    def call(self):
+    def function_call(self):
         atom = self.atom()
 
         # For function calls
@@ -510,7 +521,7 @@ class Parser:
             # No arguments
             if self.current_token.type == "RPAREN_DELIM":
                 self.read_token()
-                return CallNode(atom, args)
+                return FunctionCallNode(atom, args)
 
             # Parse first argument
             args.append(self.atom())
@@ -539,7 +550,7 @@ class Parser:
                 )
             self.read_token()
 
-            return CallNode(atom, args)
+            return FunctionCallNode(atom, args)
 
         # Continue to atom method if not function call
         return atom
