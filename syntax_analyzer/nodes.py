@@ -186,6 +186,30 @@ class ExecuteStmtNode:
         return f"execute({self.arr}, {self.func});"
 
 
+class FunctionDefNode:
+    def __init__(self, identifier, params, body):
+        self.identifier = identifier
+        self.params = params
+        self.body = body
+
+    def __repr__(self):
+        func_str = f"def {self.identifier.value}({', '.join(
+            [str(param.value) for param in self.params])}) " + "{\n"
+        for stmt in self.body:
+            func_str += f"\t{stmt}\n"
+        func_str += "}"
+
+        return func_str
+
+
+class ReturnStmtNode:
+    def __init__(self, value):
+        self.value = value
+
+    def __repr__(self):
+        return f"return {self.value};"
+
+
 class FunctionCallNode:
     def __init__(self, atom, args):
         self.atom = atom
