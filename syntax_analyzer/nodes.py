@@ -38,6 +38,14 @@ class IdentifierNode:
         return f"{self.token.value}"
 
 
+class ListNode:
+    def __init__(self, elements):
+        self.elements = elements
+
+    def __repr__(self):
+        return f"[{', '.join([str(element) for element in self.elements])}]"
+
+
 class BinaryOpNode:
     def __init__(self, left_node, op_token, right_node):
         self.left_node = left_node
@@ -112,6 +120,22 @@ class WhileStmtNode:
 
     def __repr__(self):
         return f"while ({self.condition}):\n\t{self.body}"
+
+
+class OttomateStmtNode:
+    def __init__(self, identifier):
+        self.identifier = identifier
+
+    def __repr__(self):
+        return f"Ottomate {self.identifier};"
+
+
+class StepStmtNode:
+    def __init__(self, identifier):
+        self.identifier = identifier
+
+    def __repr__(self):
+        return f"step {self.identifier};"
 
 
 class ProgramNode:

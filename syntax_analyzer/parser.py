@@ -18,6 +18,7 @@ class Parser:
             if self.current_token.type in ("SL_COMMENT", "ML_COMMENT"):
                 self.token_idx += 1  # Ignore comment tokens
             else:
+                print("Current token:", self.current_token)
                 return self.current_token
 
         return None
@@ -97,6 +98,11 @@ class Parser:
 
         elif self.current_token.matches("KEYWORD", "while"):
             return self.while_stmt()
+
+        # Parse special features
+        elif (self.current_token.type == "KEYWORD" and
+              self.current_token.value in ("Ottomate", "step", "test", "execute")):
+            return self.uniq_stmt()
 
         # Parse arithmetic and/or boolean expressions
         expr = self.logical_expr()
@@ -249,12 +255,80 @@ class Parser:
     # New Features
     def uniq_stmt(self):
         # Ottomate
+        if self.current_token.matches("KEYWORD", "Ottomate"):
+            return self.ottomate()
 
-        # Step
+        # step
+        if self.current_token.matches("KEYWORD", "step"):
+            return self.step()
 
         # test
+        if self.current_token.matches("KEYWORD", "test"):
+            return self.test()
 
         # execute
+        if self.current_token.matches("KEYWORD", "execute"):
+            return self.execute()
+
+    # SPECIAL FEATURES
+    def ottomate(self):
+        # Read "Ottomate" keyword
+        self.read_token()
+
+        # Check if next token is an identifier
+        if self.current_token.type != "IDENTIFIER":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected an identifier"
+            )
+
+        # Get identifier
+        identifier = self.current_token
+        self.read_token()
+
+        # Check if statement ends with semicolon
+        if self.current_token.type != "SEMI_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ';'"
+            )
+        self.read_token()
+
+        return OttomateStmtNode(identifier)
+
+    def step(self):
+        # Read "step" keyword
+        self.read_token()
+
+        # Check if next token is an identifier
+        if self.current_token.type != "IDENTIFIER":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected an identifier"
+            )
+
+        # Get identifier
+        identifier = self.current_token
+        self.read_token()
+
+        # Check if statement ends with semicolon
+        if self.current_token.type != "SEMI_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ';'"
+            )
+        self.read_token()
+
+        return StepStmtNode(identifier)
+
+    def test(self):
+        pass
+
+    def execute(self):
         pass
 
     # OPERATIONS (lowest to highest precedence: logical_expr -> atom)
@@ -299,7 +373,11 @@ class Parser:
     def power(self):
         return self.binary_op(self.atom, ("POW_OP",), self.factor)
 
+    # For function calls
+    pass
+
     # Literals and parenthesis expressions
+
     def atom(self):
         token = self.current_token
 
@@ -327,6 +405,14 @@ class Parser:
         elif token.type == "IDENTIFIER":
             self.read_token()
             return IdentifierNode(token)
+
+        # Parse lists
+        elif token.type == "LBRACKET_DELIM":
+            return self.list()
+
+        # Parse functions
+        elif token.matches("KEYWORD", "def"):
+            return self.function()
 
         # Parse parenthesis expressions
         elif token.type == "LPAREN_DELIM":
@@ -371,6 +457,12 @@ class Parser:
             left_node = BinaryOpNode(left_node, op_token, right_node)
 
         return left_node
+
+    def list(self):
+        pass
+
+    def function(self):
+        pass
 
     def condition_check(self):
         # Check if next token is "("
