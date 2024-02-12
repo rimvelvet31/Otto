@@ -18,7 +18,7 @@ class Parser:
             if self.current_token.type in ("SL_COMMENT", "ML_COMMENT"):
                 self.token_idx += 1  # Ignore comment tokens
             else:
-                print("Current token:", self.current_token)
+                # print(f"Current token: {self.current_token}")
                 return self.current_token
 
         return None
@@ -42,7 +42,7 @@ class Parser:
             if stmt is not None:
                 statements.append(stmt)
 
-        return ProgramNode(statements)
+        return statements
 
     # Statements
     def stmt(self):
@@ -84,6 +84,10 @@ class Parser:
                 # Parse as assignment statement
                 return self.assign_stmt(identifier, op)
 
+            # For function calls
+            if self.next_token() == "LPAREN_DELIM":
+                return self.call()
+
         # Parse output statement
         elif self.current_token.matches("KEYWORD", "utter"):
             return self.output_stmt()
@@ -120,16 +124,16 @@ class Parser:
 
     # Statement Methods
     def assign_stmt(self, identifier, op):
-        value = self.logical_expr()
+        value = self.stmt()
 
         # Check if statement ends with semicolon
-        if self.current_token.type != "SEMI_DELIM":
-            return InvalidSyntaxError(
-                self.current_token.start_pos,
-                self.current_token.end_pos,
-                "Expected ';'"
-            )
-        self.read_token()
+        # if self.current_token.type != "SEMI_DELIM":
+        #     return InvalidSyntaxError(
+        #         self.current_token.start_pos,
+        #         self.current_token.end_pos,
+        #         "Expected ';'"
+        #     )
+        # self.read_token()
 
         return AssignStmtNode(identifier, op, value)
 
@@ -240,13 +244,55 @@ class Parser:
 
     # Iterative statements
     def for_stmt(self):
-        pass
+        # Read "for" keyword
+        self.read_token()
+
+        # Check for loop variable
+        if self.current_token.type != "IDENTIFIER":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected an identifier"
+            )
+
+        # Get loop variable
+        loop_var = self.current_token
+        self.read_token()
+
+        # Check for "in" keyword
+        if self.current_token.type != "MEMBER_OP":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected 'in' keyword"
+            )
+        self.read_token()
+
+        # Check for list
+        if self.current_token.type not in ("IDENTIFIER", "LBRACK_DELIM"):
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected list variable"
+            )
+
+        # Get list variable
+        arr = None
+        if self.current_token.type == "IDENTIFIER":
+            arr = self.read_token()
+        else:
+            arr = self.list()
+
+        # Parse for loop body
+        body = self.code_block()
+
+        return ForStmtNode(loop_var, arr, body)
 
     def while_stmt(self):
         # Read "while" keyword
         self.read_token()
 
-        # Parse while condition and body
+        # Parse while condition and loop body
         condition = self.condition_check()
         body = self.code_block()
 
@@ -326,7 +372,33 @@ class Parser:
         return StepStmtNode(identifier)
 
     def test(self):
-        pass
+        cases = []
+
+        # Read "test" keyword
+        self.read_token()
+
+        # Check for "{"
+        if self.current_token.type != "LBRACE_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '{'"
+            )
+        self.read_token()
+
+        # Parse test cases
+        cases.append(self.call())
+
+        # Check for "}"
+        if self.current_token.type != "RBRACE_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '}'"
+            )
+        self.read_token()
+
+        return TestStmtNode(cases)
 
     def execute(self):
         pass
@@ -374,10 +446,52 @@ class Parser:
         return self.binary_op(self.atom, ("POW_OP",), self.factor)
 
     # For function calls
-    pass
+    def call(self):
+        atom = self.atom()
+
+        # For function calls
+        if self.current_token.type == "LPAREN_DELIM":
+            self.read_token()
+            args = []
+
+            # No arguments
+            if self.current_token.type == "RPAREN_DELIM":
+                self.read_token()
+                return CallNode(atom, args)
+
+            # Parse first argument
+            args.append(self.atom())
+
+            # Parse subsequent args if any
+            while self.current_token.type == "COMMA_DELIM":
+                self.read_token()
+
+                args.append(self.atom())
+
+            # Check for closing parenthesis
+            if self.current_token.type != "RPAREN_DELIM":
+                return InvalidSyntaxError(
+                    self.current_token.start_pos,
+                    self.current_token.end_pos,
+                    "Expected ',' or ')'"
+                )
+            self.read_token()
+
+            # Check for semicolon
+            if self.current_token.type != "SEMI_DELIM":
+                return InvalidSyntaxError(
+                    self.current_token.start_pos,
+                    self.current_token.end_pos,
+                    "Expected ';'"
+                )
+            self.read_token()
+
+            return CallNode(atom, args)
+
+        # Continue to atom method if not function call
+        return atom
 
     # Literals and parenthesis expressions
-
     def atom(self):
         token = self.current_token
 
@@ -407,12 +521,12 @@ class Parser:
             return IdentifierNode(token)
 
         # Parse lists
-        elif token.type == "LBRACKET_DELIM":
+        elif token.type == "LBRACK_DELIM":
             return self.list()
 
         # Parse functions
-        elif token.matches("KEYWORD", "def"):
-            return self.function()
+        # elif token.matches("KEYWORD", "def"):
+        #     return self.function()
 
         # Parse parenthesis expressions
         elif token.type == "LPAREN_DELIM":
@@ -459,9 +573,37 @@ class Parser:
         return left_node
 
     def list(self):
-        pass
+        elements = []
 
-    def function(self):
+        # Read "[" token
+        self.read_token()
+
+        # For empty list
+        if self.current_token.type == "RBRACK_DELIM":
+            self.read_token()
+            return ListNode(elements)
+
+        # Get first element
+        elements.append(self.atom())
+
+        # Parse subsequent elements if any
+        while self.current_token.type == "COMMA_DELIM":
+            self.read_token()
+
+            elements.append(self.atom())
+
+        # Check for "]"
+        if self.current_token.type != "RBRACK_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ',' or ')'"
+            )
+        self.read_token()
+
+        return ListNode(elements)
+
+    def function_def(self):
         pass
 
     def condition_check(self):
@@ -499,7 +641,11 @@ class Parser:
         self.read_token()
 
         # Get block body
-        body = self.stmt()
+        body = []
+        while self.current_token.type != "RBRACE_DELIM":
+            stmt = self.stmt()
+            if stmt:
+                body.append(stmt)
 
         # Check if next token is "}"
         if self.current_token.type != "RBRACE_DELIM":

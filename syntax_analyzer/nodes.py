@@ -110,7 +110,13 @@ class ConditionalStmtNode:
 
 
 class ForStmtNode:
-    pass
+    def __init__(self, loop_var, arr, body):
+        self.loop_var = loop_var
+        self.arr = arr
+        self.body = body
+
+    def __repr__(self):
+        return f"for {self.loop_var} in {self.arr}"
 
 
 class WhileStmtNode:
@@ -138,9 +144,29 @@ class StepStmtNode:
         return f"step {self.identifier};"
 
 
+class TestStmtNode:
+    def __init__(self, cases):
+        self.cases = cases
+
+    def __repr__(self):
+        test_str = "test:"
+        test_str += "\n\t".join([str(case) for case in self.cases])
+
+        return test_str
+
+
 class ProgramNode:
     def __init__(self, statements):
         self.statements = statements
 
     def __repr__(self):
         return "\n".join([str(statement) for statement in self.statements])
+
+
+class CallNode:
+    def __init__(self, atom, args):
+        self.atom = atom
+        self.args = args
+
+    def __repr__(self):
+        return f"{self.atom}({", ".join([str(arg) for arg in self.args])})"

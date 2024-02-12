@@ -1,3 +1,4 @@
-Ottomate FilterNumbers;
-    step IsPrime;
-    step CheckNum;
+for i in [1, 2, 4] {
+
+    utter("Hello");
+}
