@@ -1,12 +1,19 @@
 +--------+--------------+
 | LEXEME |    TOKEN     |
 +--------+--------------+
-| utter  |   KEYWORD    |
+|  def   |   KEYWORD    |
+|  add   |  IDENTIFIER  |
 |   (    | LPAREN_DELIM |
-|   1    |     INT      |
-|   +    |    ADD_OP    |
-|   1    |     INT      |
+|   a    |  IDENTIFIER  |
+|   ,    | COMMA_DELIM  |
+|   b    |  IDENTIFIER  |
 |   )    | RPAREN_DELIM |
+|   {    | LBRACE_DELIM |
+| return |   KEYWORD    |
+|   a    |  IDENTIFIER  |
+|   +    |    ADD_OP    |
+|   b    |  IDENTIFIER  |
 |   ;    |  SEMI_DELIM  |
+|   }    | RBRACE_DELIM |
 |  EOF   |     EOF      |
 +--------+--------------+

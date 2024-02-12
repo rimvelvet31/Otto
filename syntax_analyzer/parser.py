@@ -103,6 +103,13 @@ class Parser:
         elif self.current_token.matches("KEYWORD", "while"):
             return self.while_stmt()
 
+        # Parse function definition
+        elif self.current_token.matches("KEYWORD", "def"):
+            return self.function_def()
+
+        elif self.current_token.matches("KEYWORD", "return"):
+            return self.return_stmt()
+
         # Parse special features
         elif (self.current_token.type == "KEYWORD" and
               self.current_token.value in ("Ottomate", "step", "test", "execute")):
@@ -304,6 +311,78 @@ class Parser:
         body = self.code_block()
 
         return WhileStmtNode(condition, body)
+
+    def function_def(self):
+        # Read "def" keyword
+        self.read_token()
+
+        # Check if next token is an identifier
+        if self.current_token.type != "IDENTIFIER":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected an identifier"
+            )
+
+        # Get function name
+        identifier = self.current_token
+        self.read_token()
+
+        # Check if next token is "("
+        if self.current_token.type != "LPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '('"
+            )
+        self.read_token()
+
+        # Get function parameters
+        params = []
+        while self.current_token.type != "RPAREN_DELIM":
+            if self.current_token.type != "IDENTIFIER":
+                return InvalidSyntaxError(
+                    self.current_token.start_pos,
+                    self.current_token.end_pos,
+                    "Expected an identifier"
+                )
+            params.append(self.current_token)
+            self.read_token()
+
+            if self.current_token.type == "COMMA_DELIM":
+                self.read_token()
+
+        # Check if next token is ")"
+        if self.current_token.type != "RPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ')'"
+            )
+        self.read_token()
+
+        # Parse function body
+        body = self.code_block()
+
+        return FunctionDefNode(identifier, params, body)
+
+    def return_stmt(self):
+        # Read "return" keyword
+        self.read_token()
+
+        # Parse return value
+        value = self.logical_expr()
+
+        # Check if statement ends with semicolon
+        if self.current_token.type != "SEMI_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ';'"
+            )
+        self.read_token()
+
+        return ReturnStmtNode(value)
 
     # New Features
     def uniq_stmt(self):
@@ -588,10 +667,6 @@ class Parser:
         elif token.type == "LBRACK_DELIM":
             return self.list()
 
-        # Parse functions
-        # elif token.matches("KEYWORD", "def"):
-        #     return self.function()
-
         # Parse parenthesis expressions
         elif token.type == "LPAREN_DELIM":
             self.read_token()
@@ -666,9 +741,6 @@ class Parser:
         self.read_token()
 
         return ListNode(elements)
-
-    def function_def(self):
-        pass
 
     def condition_check(self):
         # Check if next token is "("

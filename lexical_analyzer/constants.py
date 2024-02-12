@@ -14,7 +14,6 @@ KEYWORDS = [
     "async",
     "await",
     "break",
-    "check",
     "class",
     "continue",
     "def",
