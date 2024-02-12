@@ -1,15 +1,3 @@
-while(true) {
-    if (user == "Otto") {
-        # Greet Otto
-        utter("Hello Otto!");
-    } else {
-        utter("Hello World!");
-
-
-        #*
-            Add more code
-        *#
-    }
-}
-
-
+Ottomate FilterNumbers;
+    step IsPrime;
+    step CheckNum;

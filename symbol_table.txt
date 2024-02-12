@@ -1,36 +1,14 @@
-+---------------------------+--------------+
-|          LEXEME           |    TOKEN     |
-+---------------------------+--------------+
-|           while           |   KEYWORD    |
-|             (             | LPAREN_DELIM |
-|           true            |   RESWORD    |
-|             )             | RPAREN_DELIM |
-|             {             | LBRACE_DELIM |
-|            if             |   KEYWORD    |
-|             (             | LPAREN_DELIM |
-|           user            |  IDENTIFIER  |
-|            ==             |    EQ_OP     |
-|          "Otto"           |    STRING    |
-|             )             | RPAREN_DELIM |
-|             {             | LBRACE_DELIM |
-|       # Greet Otto        |  SL_COMMENT  |
-|           utter           |   KEYWORD    |
-|             (             | LPAREN_DELIM |
-|       "Hello Otto!"       |    STRING    |
-|             )             | RPAREN_DELIM |
-|             ;             |  SEMI_DELIM  |
-|             }             | RBRACE_DELIM |
-|           else            |   KEYWORD    |
-|             {             | LBRACE_DELIM |
-|           utter           |   KEYWORD    |
-|             (             | LPAREN_DELIM |
-|      "Hello World!"       |    STRING    |
-|             )             | RPAREN_DELIM |
-|             ;             |  SEMI_DELIM  |
-|            #*             |  ML_COMMENT  |
-|             Add more code |              |
-|                *#         |              |
-|             }             | RBRACE_DELIM |
-|             }             | RBRACE_DELIM |
-|            EOF            |     EOF      |
-+---------------------------+--------------+
++---------------+------------+
+|    LEXEME     |   TOKEN    |
++---------------+------------+
+|   Ottomate    |  KEYWORD   |
+| FilterNumbers | IDENTIFIER |
+|       ;       | SEMI_DELIM |
+|     step      |  KEYWORD   |
+|    IsPrime    | IDENTIFIER |
+|       ;       | SEMI_DELIM |
+|     step      |  KEYWORD   |
+|   CheckNum    | IDENTIFIER |
+|       ;       | SEMI_DELIM |
+|      EOF      |    EOF     |
++---------------+------------+
