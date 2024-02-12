@@ -18,7 +18,7 @@ class Parser:
             if self.current_token.type in ("SL_COMMENT", "ML_COMMENT"):
                 self.token_idx += 1  # Ignore comment tokens
             else:
-                # print(f"Current token: {self.current_token}")
+                print(f"Current token: {self.current_token}")
                 return self.current_token
 
         return None
@@ -401,10 +401,63 @@ class Parser:
         return TestStmtNode(cases)
 
     def execute(self):
-        pass
+        # Read "execute" keyword
+        self.read_token()
+
+        # Check if next token is "("
+        if self.current_token.type != "LPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected '('"
+            )
+        self.read_token()
+
+        # Parse list
+        arr = self.list()
+
+        # Check if next token is ","
+        if self.current_token.type != "COMMA_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ','"
+            )
+        self.read_token()
+
+        # Parse function call
+        if self.current_token.type != "IDENTIFIER":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected an identifier"
+            )
+        func = self.current_token
+        self.read_token()
+
+        # Check if next token is ")"
+        if self.current_token.type != "RPAREN_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ')'"
+            )
+        self.read_token()
+
+        # Check if statement ends with semicolon
+        if self.current_token.type != "SEMI_DELIM":
+            return InvalidSyntaxError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                "Expected ';'"
+            )
+        self.read_token()
+
+        return ExecuteStmtNode(arr, func)
 
     # OPERATIONS (lowest to highest precedence: logical_expr -> atom)
     # Boolean expressions
+
     def logical_expr(self):
         return self.binary_op(self.comparison_expr, ("AND_OP", "OR_OP"))
 
