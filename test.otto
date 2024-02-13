@@ -1,1 +1,33 @@
-@
+# Enter Otto
+
+name = "Otto";
+year_developed = 2024;
+simple_yet_elegant = true;
+
+if (simple_yet_elegant) {
+    utter("Great for automating tasks efficiently!");
+}
+
+tasks = [
+    "Refactor lexer", 
+    "Finish parser",
+    "Conduct unit tests"
+];
+
+for task in tasks {
+    send_tasks;
+}
+
+user = ("Enter name: ");
+
+def remind_tasks(user) {
+    utter("Hello " + user + "! Here are your tasks for the day");
+
+    execute(["Daily", "8:00am"], fetch_tasks);
+}
+
+Ottomate automate_tasks;
+    step remind_tasks;
+
+
+

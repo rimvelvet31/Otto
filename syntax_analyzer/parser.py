@@ -211,7 +211,7 @@ class Parser:
             self.set_error(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
-                "Expected ')'"
+                "Expected ';'"
             )
             return None
         self.read_token()
@@ -284,7 +284,7 @@ class Parser:
             self.set_error(
                 self.current_token.start_pos,
                 self.current_token.end_pos,
-                "Expected 'list variable'"
+                "Expected list variable"
             )
             return None
 
