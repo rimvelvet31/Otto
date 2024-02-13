@@ -19,6 +19,7 @@ class Parser:
             if self.current_token.type in ("SL_COMMENT", "ML_COMMENT"):
                 self.token_idx += 1  # Ignore comment tokens
             else:
+                # UNCOMMENT WHEN DEBUGGING
                 # print(f"Current token: {self.current_token}")
                 return self.current_token
 
