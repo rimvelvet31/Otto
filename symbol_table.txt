@@ -1,12 +1,85 @@
-+----------------+--------------+
-|     LEXEME     |    TOKEN     |
-+----------------+--------------+
-|      name      |  IDENTIFIER  |
-|       =        |  ASSIGN_OP   |
-|     input      |   KEYWORD    |
-|       (        | LPAREN_DELIM |
-| "Enter name: " |    STRING    |
-|       )        | RPAREN_DELIM |
-|       ;        |  SEMI_DELIM  |
-|      EOF       |     EOF      |
-+----------------+--------------+
++-------------------------------------------+--------------+
+|                  LEXEME                   |    TOKEN     |
++-------------------------------------------+--------------+
+|               # Enter Otto                |  SL_COMMENT  |
+|                   name                    |  IDENTIFIER  |
+|                     =                     |  ASSIGN_OP   |
+|                  "Otto"                   |    STRING    |
+|                     ;                     |  SEMI_DELIM  |
+|              year_developed               |  IDENTIFIER  |
+|                     =                     |  ASSIGN_OP   |
+|                   2024                    |     INT      |
+|                     ;                     |  SEMI_DELIM  |
+|            simple_yet_elegant             |  IDENTIFIER  |
+|                     =                     |  ASSIGN_OP   |
+|                   true                    |   RESWORD    |
+|                     ;                     |  SEMI_DELIM  |
+|                    if                     |   KEYWORD    |
+|                     (                     | LPAREN_DELIM |
+|            simple_yet_elegant             |  IDENTIFIER  |
+|                     )                     | RPAREN_DELIM |
+|                     {                     | LBRACE_DELIM |
+|                   utter                   |   KEYWORD    |
+|                     (                     | LPAREN_DELIM |
+| "Great for automating tasks efficiently!" |    STRING    |
+|                     )                     | RPAREN_DELIM |
+|                     ;                     |  SEMI_DELIM  |
+|                     }                     | RBRACE_DELIM |
+|                   tasks                   |  IDENTIFIER  |
+|                     =                     |  ASSIGN_OP   |
+|                     [                     | LBRACK_DELIM |
+|             "Refactor lexer"              |    STRING    |
+|                     ,                     | COMMA_DELIM  |
+|              "Finish parser"              |    STRING    |
+|                     ,                     | COMMA_DELIM  |
+|           "Conduct unit tests"            |    STRING    |
+|                     ]                     | RBRACK_DELIM |
+|                     ;                     |  SEMI_DELIM  |
+|                    for                    |   KEYWORD    |
+|                   task                    |  IDENTIFIER  |
+|                    in                     |  MEMBER_OP   |
+|                   tasks                   |  IDENTIFIER  |
+|                     {                     | LBRACE_DELIM |
+|                send_tasks                 |  IDENTIFIER  |
+|                     ;                     |  SEMI_DELIM  |
+|                     }                     | RBRACE_DELIM |
+|                   user                    |  IDENTIFIER  |
+|                     =                     |  ASSIGN_OP   |
+|                     (                     | LPAREN_DELIM |
+|              "Enter name: "               |    STRING    |
+|                     )                     | RPAREN_DELIM |
+|                     ;                     |  SEMI_DELIM  |
+|                    def                    |   KEYWORD    |
+|               remind_tasks                |  IDENTIFIER  |
+|                     (                     | LPAREN_DELIM |
+|                   user                    |  IDENTIFIER  |
+|                     )                     | RPAREN_DELIM |
+|                     {                     | LBRACE_DELIM |
+|                   utter                   |   KEYWORD    |
+|                     (                     | LPAREN_DELIM |
+|                 "Hello "                  |    STRING    |
+|                     +                     |    ADD_OP    |
+|                   user                    |  IDENTIFIER  |
+|                     +                     |    ADD_OP    |
+|    "! Here are your tasks for the day"    |    STRING    |
+|                     )                     | RPAREN_DELIM |
+|                  execute                  |   KEYWORD    |
+|                     (                     | LPAREN_DELIM |
+|                     [                     | LBRACK_DELIM |
+|                  "Daily"                  |    STRING    |
+|                     ,                     | COMMA_DELIM  |
+|                 "8:00am"                  |    STRING    |
+|                     ]                     | RBRACK_DELIM |
+|                     ,                     | COMMA_DELIM  |
+|                fetch_tasks                |  IDENTIFIER  |
+|                     )                     | RPAREN_DELIM |
+|                     ;                     |  SEMI_DELIM  |
+|                     }                     | RBRACE_DELIM |
+|                 Ottomate                  |   KEYWORD    |
+|              automate_tasks               |  IDENTIFIER  |
+|                     ;                     |  SEMI_DELIM  |
+|                   step                    |   KEYWORD    |
+|               remind_tasks                |  IDENTIFIER  |
+|                     ;                     |  SEMI_DELIM  |
+|                    EOF                    |     EOF      |
++-------------------------------------------+--------------+
