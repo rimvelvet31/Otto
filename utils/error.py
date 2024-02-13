@@ -18,18 +18,16 @@ class Error:
         return message
 
 
-# Lexer Errors
-class IllegalCharError(Error):
+class InvalidTokenError(Error):
     def __init__(self, start_pos, end_pos, details):
-        super().__init__(start_pos, end_pos, "Illegal Character", details)
+        super().__init__(start_pos, end_pos, "Invalid Token", details)
 
 
-class UnterminatedStrError(Error):
+class UnclosedStringError(Error):
     def __init__(self, start_pos, end_pos, details):
-        super().__init__(start_pos, end_pos, "Unterminated String", details)
+        super().__init__(start_pos, end_pos, "Unclosed String", details)
 
 
-# Parser Errors
 class InvalidSyntaxError(Error):
     def __init__(self, start_pos, end_pos, details=""):
         self.advance_count = 0

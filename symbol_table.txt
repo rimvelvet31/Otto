@@ -63,6 +63,7 @@
 |                     +                     |    ADD_OP    |
 |    "! Here are your tasks for the day"    |    STRING    |
 |                     )                     | RPAREN_DELIM |
+|                     ;                     |  SEMI_DELIM  |
 |                  execute                  |   KEYWORD    |
 |                     (                     | LPAREN_DELIM |
 |                     [                     | LBRACK_DELIM |

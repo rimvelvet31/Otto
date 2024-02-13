@@ -1,5 +1,5 @@
 from syntax_analyzer.nodes import *
-from utils.error import InvalidSyntaxError
+from utils.error import InvalidTokenError, UnclosedStringError, InvalidSyntaxError
 
 
 class Parser:
@@ -51,6 +51,26 @@ class Parser:
 
     # Statements
     def stmt(self):
+
+        # Handle invalid tokens
+        if self.current_token.type == "INVALID_TOKEN":
+            self.error = InvalidTokenError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                self.current_token.value
+            )
+            self.read_token()
+            return None
+
+        # Handle unclosed strings
+        if self.current_token.type == "UNCLOSED_STR":
+            self.error = UnclosedStringError(
+                self.current_token.start_pos,
+                self.current_token.end_pos,
+                self.current_token.value
+            )
+            self.read_token()
+            return None
 
         # Parse either assignment or input statement
         if self.current_token.type == "IDENTIFIER":
