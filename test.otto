@@ -28,6 +28,3 @@ def remind_tasks(user) {
 
 Ottomate automate_tasks;
     step remind_tasks;
-
-
-
