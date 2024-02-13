@@ -267,11 +267,3 @@ class Lexer:
     def peek(self, offset=1):
         peek_idx = self.pos.idx + offset
         return self.text[peek_idx] if peek_idx < len(self.text) else None
-
-
-# RUN
-def run(file, text):
-    lexer = Lexer(file, text)
-    tokens = lexer.tokenize()
-
-    return tokens
