@@ -37,6 +37,7 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
     parser = Parser(tokens)
     ast = parser.otto_progstmt()
 
+    # UNCOMMENT WHEN DEBUGGING
     # for statement in ast:
     #     print(statement)
 
