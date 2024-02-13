@@ -78,12 +78,11 @@ class AssignStmtNode:
 
 
 class InputStmtNode:
-    def __init__(self, identifier, prompt):
-        self.identifier = identifier
-        self.prompt = prompt
+    def __init__(self, value):
+        self.value = value
 
     def __repr__(self):
-        return f"{self.identifier.value} = input({self.prompt});"
+        return str(self.value)
 
 
 class OutputStmtNode:
@@ -91,7 +90,7 @@ class OutputStmtNode:
         self.output = output
 
     def __repr__(self):
-        return f"utter({self.output});"
+        return str(self.output)
 
 
 class ConditionalStmtNode:

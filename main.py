@@ -37,8 +37,13 @@ with open(FILE_PATH, "r", encoding="utf-8") as file:
     parser = Parser(tokens)
     ast = parser.otto_progstmt()
 
-    for statement in ast:
-        print(statement)
+    # for statement in ast:
+    #     print(statement)
+
+    if parser.error:
+        print(parser.error)
+    else:
+        print("Parsing completed with no errors")
 
 # Write symbol table to output file
 OUTPUT_FILE = "symbol_table.txt"

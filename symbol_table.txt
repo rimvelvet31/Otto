@@ -1,19 +1,12 @@
-+--------+--------------+
-| LEXEME |    TOKEN     |
-+--------+--------------+
-|  def   |   KEYWORD    |
-|  add   |  IDENTIFIER  |
-|   (    | LPAREN_DELIM |
-|   a    |  IDENTIFIER  |
-|   ,    | COMMA_DELIM  |
-|   b    |  IDENTIFIER  |
-|   )    | RPAREN_DELIM |
-|   {    | LBRACE_DELIM |
-| return |   KEYWORD    |
-|   a    |  IDENTIFIER  |
-|   +    |    ADD_OP    |
-|   b    |  IDENTIFIER  |
-|   ;    |  SEMI_DELIM  |
-|   }    | RBRACE_DELIM |
-|  EOF   |     EOF      |
-+--------+--------------+
++----------------+--------------+
+|     LEXEME     |    TOKEN     |
++----------------+--------------+
+|      name      |  IDENTIFIER  |
+|       =        |  ASSIGN_OP   |
+|     input      |   KEYWORD    |
+|       (        | LPAREN_DELIM |
+| "Enter name: " |    STRING    |
+|       )        | RPAREN_DELIM |
+|       ;        |  SEMI_DELIM  |
+|      EOF       |     EOF      |
++----------------+--------------+
